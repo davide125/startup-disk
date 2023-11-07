@@ -1,0 +1,11 @@
+[package]
+name = "startup-disk"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+asahi-bless = { git = "https://github.com/davide125/asahi-nvram.git", branch = "lib" }
+gtk = { version = "0.7.3", package = "gtk4", features = ["gnome_45"] }
+sudo = "0.6"
