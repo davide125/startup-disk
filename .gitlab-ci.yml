@@ -1,8 +1,7 @@
-image: "rust:latest"
+image: "fedora:39"
 
 before_script:
-  - apt-get update -yq
-  - apt-get install -y libgtk-4-dev
+  - dnf install -y cargo gtk4-devel
 
 test:cargo:
   script:
