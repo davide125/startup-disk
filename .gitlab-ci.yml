@@ -1,5 +1,9 @@
 image: "rust:latest"
 
+before_script:
+  - apt-get update -yq
+  - apt-get install -y libgtk-4-dev
+
 test:cargo:
   script:
     - rustc --version && cargo --version  # Print version info for debugging
