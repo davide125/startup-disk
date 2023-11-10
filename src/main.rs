@@ -2,7 +2,7 @@ use adw::prelude::*;
 use adw::Application;
 use asahi_bless::BootCandidate;
 use asahi_bless::Error;
-use gtk::{glib, ApplicationWindow, Box, Orientation, ToggleButton};
+use gtk::{glib, ApplicationWindow, Box, Label, Orientation, ToggleButton};
 use rand::Rng;
 use std::env;
 use uuid::Uuid;
@@ -108,7 +108,8 @@ impl StartupDiskTrait for StartupDiskLibrary {
 }
 
 fn build_ui(app: &Application) {
-    let container = Box::new(Orientation::Horizontal, 10);
+    let container = Box::new(Orientation::Vertical, 2);
+    let buttons_container = Box::new(Orientation::Horizontal, 10);
     let mut last_button: Option<ToggleButton> = None;
 
     let use_mock_library = env::var("USE_MOCK_LIBRARY").is_ok();
@@ -138,9 +139,20 @@ fn build_ui(app: &Application) {
         if let Some(ref last) = last_button {
             button.set_group(Some(last));
         }
-        container.append(&button);
+        buttons_container.append(&button);
         last_button = Some(button);
     }
+
+    let label = Label::builder()
+        .label("Select the disk you want to use to start up from")
+        .margin_top(12)
+        .margin_bottom(12)
+        .margin_start(12)
+        .margin_end(12)
+        .build();
+
+    container.append(&label);
+    container.append(&buttons_container);
 
     // Create a window
     let window = ApplicationWindow::builder()
