@@ -107,7 +107,7 @@ impl StartupDiskTrait for StartupDiskLibrary {
     }
 }
 
-fn build_ui(app: &Application) {
+fn build_window(app: &Application) -> ApplicationWindow {
     let container = Box::new(Orientation::Vertical, 2);
     let buttons_container = Box::new(Orientation::Horizontal, 10);
     let mut last_button: Option<ToggleButton> = None;
@@ -161,6 +161,18 @@ fn build_ui(app: &Application) {
         .child(&container)
         .build();
 
-    // Present window
+    return window;
+}
+
+fn build_ui(app: &Application) {
+    // Get the current window or create one if necessary
+    let window = if let Some(window) = app.active_window() {
+        window
+    } else {
+        let window = build_window(app);
+        window.upcast()
+    };
+
+    // Present the window
     window.present();
 }
