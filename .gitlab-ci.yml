@@ -1,7 +1,7 @@
 image: "fedora:39"
 
 before_script:
-  - dnf install -y cargo gtk4-devel
+  - dnf install -y cargo gtk4-devel libadwaita-devel
 
 test:cargo:
   script:

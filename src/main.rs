@@ -1,7 +1,8 @@
+use adw::prelude::*;
+use adw::Application;
 use asahi_bless::BootCandidate;
 use asahi_bless::Error;
-use gtk::prelude::*;
-use gtk::{glib, Application, ApplicationWindow, Box, Orientation, ToggleButton};
+use gtk::{glib, ApplicationWindow, Box, Orientation, ToggleButton};
 use rand::Rng;
 use std::env;
 use uuid::Uuid;
@@ -10,7 +11,7 @@ const APP_ID: &str = "org.gnome.StartupDisk";
 
 fn main() -> glib::ExitCode {
     // Create a new application
-    let app = Application::builder().application_id(APP_ID).build();
+    let app = adw::Application::builder().application_id(APP_ID).build();
 
     // Connect to "activate" signal of `app`
     app.connect_activate(build_ui);
