@@ -2,7 +2,7 @@ use adw::prelude::*;
 use adw::Application;
 use asahi_bless::BootCandidate;
 use asahi_bless::Error;
-use gtk::{glib, ApplicationWindow, Box, Label, Orientation, ToggleButton};
+use gtk::{gio, glib, ApplicationWindow, Box, Label, Orientation, ToggleButton};
 use rand::Rng;
 use std::env;
 use uuid::Uuid;
@@ -15,6 +15,13 @@ fn main() -> glib::ExitCode {
 
     // Connect to "activate" signal of `app`
     app.connect_activate(build_ui);
+
+    // Hook up actions
+    app.set_accels_for_action("app.quit", &["<primary>q"]);
+    let quit_action = gio::ActionEntry::builder("quit")
+        .activate(|app: &Application, _, _| app.quit())
+        .build();
+    app.add_action_entries([quit_action]);
 
     // Run the application
     app.run()
