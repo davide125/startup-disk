@@ -65,13 +65,11 @@ fn build_window(app: &Application) -> ApplicationWindow {
     container.append(&buttons_container);
 
     // Create a window
-    let window = ApplicationWindow::builder()
+    ApplicationWindow::builder()
         .application(app)
         .title("Startup Disk")
         .child(&container)
-        .build();
-
-    return window;
+        .build()
 }
 
 fn build_ui(app: &Application) {

@@ -29,36 +29,37 @@ impl StartupDiskTrait for AsahiBlessLibrary {
     fn get_boot_candidates(&self) -> Result<Vec<BootCandidate>> {
         // We need root for this to do anything useful
         sudo::escalate_if_needed().unwrap();
-        return asahi_bless::get_boot_candidates();
+        asahi_bless::get_boot_candidates()
     }
 
     fn set_boot_volume(&self, cand: &BootCandidate, next: bool) -> Result<()> {
         // We need root for this to do anything useful
         sudo::escalate_if_needed().unwrap();
-        return asahi_bless::set_boot_volume(cand, next);
+        asahi_bless::set_boot_volume(cand, next)
     }
 }
 
 struct MockLibrary;
 impl StartupDiskTrait for MockLibrary {
     fn get_boot_candidates(&self) -> Result<Vec<BootCandidate>> {
-        let mut cands: Vec<BootCandidate> = Vec::new();
-        cands.push(BootCandidate {
-            vg_uuid: Uuid::new_v4(),
-            vol_names: generate_random_strings(2, 10),
-            part_uuid: Uuid::new_v4(),
-        });
-        cands.push(BootCandidate {
-            vg_uuid: Uuid::new_v4(),
-            vol_names: generate_random_strings(2, 10),
-            part_uuid: Uuid::new_v4(),
-        });
-        cands.push(BootCandidate {
-            vg_uuid: Uuid::new_v4(),
-            vol_names: generate_random_strings(2, 10),
-            part_uuid: Uuid::new_v4(),
-        });
-        return Ok(cands);
+        let cands: Vec<BootCandidate> = vec![
+            BootCandidate {
+                vg_uuid: Uuid::new_v4(),
+                vol_names: generate_random_strings(2, 10),
+                part_uuid: Uuid::new_v4(),
+            },
+            BootCandidate {
+                vg_uuid: Uuid::new_v4(),
+                vol_names: generate_random_strings(2, 10),
+                part_uuid: Uuid::new_v4(),
+            },
+            BootCandidate {
+                vg_uuid: Uuid::new_v4(),
+                vol_names: generate_random_strings(2, 10),
+                part_uuid: Uuid::new_v4(),
+            },
+        ];
+        Ok(cands)
     }
 
     fn set_boot_volume(&self, cand: &BootCandidate, next: bool) -> Result<()> {
@@ -67,7 +68,7 @@ impl StartupDiskTrait for MockLibrary {
             cand.vol_names.join(", "),
             next
         );
-        return Ok(());
+        Ok(())
     }
 }
 
@@ -100,5 +101,5 @@ pub fn startup_disk_library() -> &'static dyn StartupDiskTrait {
         &StartupDiskLibrary::AsahiBless(AsahiBlessLibrary)
     };
 
-    return startup_disk_library;
+    startup_disk_library
 }
