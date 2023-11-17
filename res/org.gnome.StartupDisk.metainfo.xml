@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component type="desktop">
+<component type="desktop-application">
   <id>org.gnome.StartupDisk</id>
   <name>Startup Disk</name>
+  <summary>Choose the startup volume</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
   <description>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="menubar">
+    <item>
+      <attribute name="label">About</attribute>
+      <attribute name="action">app.about</attribute>
+    </item>
+  </menu>
+</interface>

@@ -12,3 +12,6 @@ gtk = { version = "0.7.3", package = "gtk4", features = ["gnome_45"] }
 rand = "0.8.5"
 sudo = "0.6"
 uuid = "1.5.0"
+
+[build-dependencies]
+glib-build-tools = "0.18.0"

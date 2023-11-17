@@ -1,23 +1,35 @@
 use adw::prelude::*;
-use adw::{Application, ApplicationWindow, HeaderBar};
-use gtk::{gio, glib, Box, Label, Orientation, ToggleButton};
+use adw::{AboutWindow, Application, ApplicationWindow, HeaderBar};
+use gtk::{gio, glib, Box, Label, MenuButton, Orientation, ToggleButton};
 use startup_disk::startup_disk_library;
 
 const APP_NAME: &str = "Startup Disk";
 const APP_ID: &str = "org.gnome.StartupDisk";
+const APP_VERSION: &str = "0.1.0";
+const RESOURCE_BASE: &str = "/org/gnome/startup-disk";
 
 fn main() -> glib::ExitCode {
+    // Register and include resources
+    gio::resources_register_include!("startup-disk.gresource")
+        .expect("Failed to register resources.");
+
     // Create a new application
-    let app = Application::builder().application_id(APP_ID).build();
+    let app = Application::builder()
+        .application_id(APP_ID)
+        .resource_base_path(RESOURCE_BASE)
+        .build();
 
     // Connect to "activate" signal of `app`
     app.connect_activate(build_ui);
 
     // Hook up actions
+    let about_action = gio::ActionEntry::builder("about")
+        .activate(|_, _, _| show_about())
+        .build();
     let quit_action = gio::ActionEntry::builder("quit")
         .activate(|app: &Application, _, _| app.quit())
         .build();
-    app.add_action_entries([quit_action]);
+    app.add_action_entries([about_action, quit_action]);
     app.set_accels_for_action("app.quit", &["<primary>q"]);
     app.set_accels_for_action("window.close", &["<primary>w"]);
 
@@ -60,6 +72,14 @@ fn build_boot_candidates_box() -> Box {
 fn build_app_window(app: &Application) -> ApplicationWindow {
     let content = Box::new(Orientation::Vertical, 0);
 
+    let menu_button = MenuButton::builder()
+        .icon_name("open-menu-symbolic")
+        .menu_model(&app.menubar().unwrap())
+        .build();
+
+    let header_bar = HeaderBar::new();
+    header_bar.pack_end(&menu_button);
+
     let label = Label::builder()
         .label("Select the disk you want to use to start up from")
         .margin_top(12)
@@ -68,7 +88,7 @@ fn build_app_window(app: &Application) -> ApplicationWindow {
         .margin_end(12)
         .build();
 
-    content.append(&HeaderBar::new());
+    content.append(&header_bar);
     content.append(&label);
     content.append(&build_boot_candidates_box());
 
@@ -90,5 +110,14 @@ fn build_ui(app: &Application) {
     };
 
     // Present the window
+    window.present();
+}
+
+fn show_about() {
+    let window = AboutWindow::from_appdata(
+        "/org/gnome/startup-disk/org.gnome.StartupDisk.metainfo.xml",
+        Some(APP_VERSION),
+    );
+
     window.present();
 }
