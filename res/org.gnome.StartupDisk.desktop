@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Startup Disk
+Exec=startup-disk
+Icon=org.gnome.StartupDisk
+Terminal=false
+Type=Application
+Categories=Settings;
+StartupNotify=true

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>org.gnome.StartupDisk</id>
+  <name>Startup Disk</name>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <description>
+    <p>
+      Simple interface to choose the startup volume on Apple Silicon systems
+    </p>
+  </description>
+  <developer_name>Davide Cavalca</developer_name>
+  <url type="homepage">https://gitlab.gnome.org/davide125/startup-disk</url>
+  <url type="bugtracker">https://gitlab.gnome.org/davide125/startup-disk/-/issues</url>
+  <project_group>GNOME</project_group>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="0.1.0" type="development">
+      <description>
+        <p>
+	  Initial release
+        </p>
+      </description>
+    </release>
+  </releases>
+</component>
