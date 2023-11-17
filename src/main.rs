@@ -19,6 +19,7 @@ fn main() -> glib::ExitCode {
         .build();
     app.add_action_entries([quit_action]);
     app.set_accels_for_action("app.quit", &["<primary>q"]);
+    app.set_accels_for_action("window.close", &["<primary>w"]);
 
     // Run the application
     app.run()
