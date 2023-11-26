@@ -67,7 +67,7 @@ fn build_boot_candidates() -> ScrolledWindow {
                 .pixel_size(256)
                 .build(),
         );
-        button_content.append(&Label::new(Some(&cand.vol_names.join(", "))));
+        button_content.append(&Label::builder().label(cand.vol_names.join(", ")).build());
 
         let button = ToggleButton::builder()
             .child(&button_content)
