@@ -1,7 +1,7 @@
 use adw::prelude::*;
 use adw::{AboutWindow, Application, ApplicationWindow, HeaderBar};
 use const_format::concatcp;
-use gtk::{gio, glib, Box, Label, MenuButton, Orientation, ToggleButton};
+use gtk::{gio, glib, Box, FlowBox, Label, MenuButton, Orientation, ScrolledWindow, ToggleButton};
 use startup_disk::startup_disk_library;
 
 const APP_NAME: &str = "Startup Disk";
@@ -38,8 +38,16 @@ fn main() -> glib::ExitCode {
     app.run()
 }
 
-fn build_boot_candidates_box() -> Box {
-    let buttons_container = Box::new(Orientation::Horizontal, 10);
+fn build_boot_candidates() -> ScrolledWindow {
+    let buttons_container = FlowBox::builder()
+        .orientation(Orientation::Horizontal)
+        .margin_top(12)
+        .margin_bottom(12)
+        .margin_start(12)
+        .margin_end(12)
+        .row_spacing(12)
+        .column_spacing(12)
+        .build();
     let mut last_button: Option<ToggleButton> = None;
 
     let startup_disk_library = startup_disk_library();
@@ -51,12 +59,9 @@ fn build_boot_candidates_box() -> Box {
             (cand.part_uuid == default_cand.part_uuid) && (cand.vg_uuid == default_cand.vg_uuid);
 
         let button = ToggleButton::builder()
+            .icon_name("drive-harddisk")
             .label(cand.vol_names.join(", "))
             .active(is_default)
-            .margin_top(12)
-            .margin_bottom(12)
-            .margin_start(12)
-            .margin_end(12)
             .build();
 
         // Connect to "clicked" signal of `button`
@@ -71,7 +76,11 @@ fn build_boot_candidates_box() -> Box {
         last_button = Some(button);
     }
 
-    buttons_container
+    ScrolledWindow::builder()
+        .child(&buttons_container)
+        .propagate_natural_height(true)
+        .propagate_natural_width(true)
+        .build()
 }
 
 fn build_app_window(app: &Application) -> ApplicationWindow {
@@ -95,7 +104,7 @@ fn build_app_window(app: &Application) -> ApplicationWindow {
 
     content.append(&header_bar);
     content.append(&label);
-    content.append(&build_boot_candidates_box());
+    content.append(&build_boot_candidates());
 
     // Create a window
     ApplicationWindow::builder()
