@@ -20,6 +20,7 @@ fn generate_random_strings(num_strings: usize, max_length: usize) -> Vec<String>
 }
 
 pub trait StartupDiskTrait {
+    fn needs_escalation(&self, method: &str) -> bool;
     fn get_boot_candidates(&self) -> Result<Vec<BootCandidate>>;
     fn get_boot_volume(&self, next: bool) -> Result<BootCandidate>;
     fn set_boot_volume(&self, cand: &BootCandidate, next: bool) -> Result<()>;
@@ -27,27 +28,34 @@ pub trait StartupDiskTrait {
 
 struct AsahiBlessLibrary;
 impl StartupDiskTrait for AsahiBlessLibrary {
+    fn needs_escalation(&self, method: &str) -> bool {
+        match method {
+            "get_boot_candidates" => true,
+            "get_boot_volume" => true,
+            "set_boot_volume" => true,
+            &_ => false,
+        }
+    }
+
     fn get_boot_candidates(&self) -> Result<Vec<BootCandidate>> {
-        // We need root for this to do anything useful
-        sudo::escalate_if_needed().unwrap();
         asahi_bless::get_boot_candidates()
     }
 
     fn get_boot_volume(&self, next: bool) -> Result<BootCandidate> {
-        // We need root for this to do anything useful
-        sudo::escalate_if_needed().unwrap();
         asahi_bless::get_boot_volume(next)
     }
 
     fn set_boot_volume(&self, cand: &BootCandidate, next: bool) -> Result<()> {
-        // We need root for this to do anything useful
-        sudo::escalate_if_needed().unwrap();
         asahi_bless::set_boot_volume(cand, next)
     }
 }
 
 struct MockLibrary;
 impl StartupDiskTrait for MockLibrary {
+    fn needs_escalation(&self, _method: &str) -> bool {
+        false
+    }
+
     fn get_boot_candidates(&self) -> Result<Vec<BootCandidate>> {
         let cands: Vec<BootCandidate> = vec![
             BootCandidate {
@@ -93,6 +101,13 @@ enum StartupDiskLibrary {
 }
 
 impl StartupDiskTrait for StartupDiskLibrary {
+    fn needs_escalation(&self, method: &str) -> bool {
+        match self {
+            StartupDiskLibrary::AsahiBless(lib) => lib.needs_escalation(method),
+            StartupDiskLibrary::Mock(lib) => lib.needs_escalation(method),
+        }
+    }
+
     fn get_boot_candidates(&self) -> Result<Vec<BootCandidate>> {
         match self {
             StartupDiskLibrary::AsahiBless(lib) => lib.get_boot_candidates(),

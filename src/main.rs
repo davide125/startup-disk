@@ -53,7 +53,13 @@ fn build_boot_candidates() -> ScrolledWindow {
     let mut last_button: Option<ToggleButton> = None;
 
     let startup_disk_library = startup_disk_library();
+    if startup_disk_library.needs_escalation("get_boot_volume") {
+        sudo::escalate_if_needed().unwrap();
+    }
     let default_cand = startup_disk_library.get_boot_volume(false).unwrap();
+    if startup_disk_library.needs_escalation("get_boot_candidates") {
+        sudo::escalate_if_needed().unwrap();
+    }
     let cands = startup_disk_library.get_boot_candidates().unwrap();
 
     for cand in cands {
@@ -76,6 +82,9 @@ fn build_boot_candidates() -> ScrolledWindow {
 
         // Connect to "clicked" signal of `button`
         button.connect_clicked(move |_button| {
+            if startup_disk_library.needs_escalation("set_boot_volume") {
+                sudo::escalate_if_needed().unwrap();
+            }
             startup_disk_library.set_boot_volume(&cand, false).unwrap();
         });
 
