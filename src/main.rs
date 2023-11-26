@@ -1,5 +1,6 @@
 use adw::prelude::*;
 use adw::{AboutWindow, Application, ApplicationWindow, HeaderBar};
+use const_format::concatcp;
 use gtk::{gio, glib, Box, Label, MenuButton, Orientation, ToggleButton};
 use startup_disk::startup_disk_library;
 
@@ -119,7 +120,7 @@ fn build_ui(app: &Application) {
 
 fn show_about() {
     let window = AboutWindow::from_appdata(
-        "/org/gnome/startup-disk/org.gnome.StartupDisk.metainfo.xml",
+        concatcp!(RESOURCE_BASE, "/", APP_ID, ".metainfo.xml"),
         Some(APP_VERSION),
     );
 
