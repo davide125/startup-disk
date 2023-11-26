@@ -1,7 +1,9 @@
 use adw::prelude::*;
 use adw::{AboutWindow, Application, ApplicationWindow, HeaderBar};
 use const_format::concatcp;
-use gtk::{gio, glib, Box, FlowBox, Label, MenuButton, Orientation, ScrolledWindow, ToggleButton};
+use gtk::{
+    gio, glib, Box, FlowBox, Image, Label, MenuButton, Orientation, ScrolledWindow, ToggleButton,
+};
 use startup_disk::startup_disk_library;
 
 const APP_NAME: &str = "Startup Disk";
@@ -58,9 +60,17 @@ fn build_boot_candidates() -> ScrolledWindow {
         let is_default: bool =
             (cand.part_uuid == default_cand.part_uuid) && (cand.vg_uuid == default_cand.vg_uuid);
 
+        let button_content = Box::new(Orientation::Vertical, 0);
+        button_content.append(
+            &Image::builder()
+                .icon_name("drive-harddisk")
+                .pixel_size(256)
+                .build(),
+        );
+        button_content.append(&Label::new(Some(&cand.vol_names.join(", "))));
+
         let button = ToggleButton::builder()
-            .icon_name("drive-harddisk")
-            .label(cand.vol_names.join(", "))
+            .child(&button_content)
             .active(is_default)
             .build();
 
