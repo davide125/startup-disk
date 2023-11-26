@@ -21,6 +21,7 @@ fn generate_random_strings(num_strings: usize, max_length: usize) -> Vec<String>
 
 pub trait StartupDiskTrait {
     fn get_boot_candidates(&self) -> Result<Vec<BootCandidate>>;
+    fn get_boot_volume(&self, next: bool) -> Result<BootCandidate>;
     fn set_boot_volume(&self, cand: &BootCandidate, next: bool) -> Result<()>;
 }
 
@@ -30,6 +31,12 @@ impl StartupDiskTrait for AsahiBlessLibrary {
         // We need root for this to do anything useful
         sudo::escalate_if_needed().unwrap();
         asahi_bless::get_boot_candidates()
+    }
+
+    fn get_boot_volume(&self, next: bool) -> Result<BootCandidate> {
+        // We need root for this to do anything useful
+        sudo::escalate_if_needed().unwrap();
+        asahi_bless::get_boot_volume(next)
     }
 
     fn set_boot_volume(&self, cand: &BootCandidate, next: bool) -> Result<()> {
@@ -62,6 +69,14 @@ impl StartupDiskTrait for MockLibrary {
         Ok(cands)
     }
 
+    fn get_boot_volume(&self, _next: bool) -> Result<BootCandidate> {
+        Ok(BootCandidate {
+            vg_uuid: Uuid::new_v4(),
+            vol_names: Vec::new(),
+            part_uuid: Uuid::new_v4(),
+        })
+    }
+
     fn set_boot_volume(&self, cand: &BootCandidate, next: bool) -> Result<()> {
         println!(
             "Setting boot volume: {} {}",
@@ -82,6 +97,12 @@ impl StartupDiskTrait for StartupDiskLibrary {
         match self {
             StartupDiskLibrary::AsahiBless(lib) => lib.get_boot_candidates(),
             StartupDiskLibrary::Mock(lib) => lib.get_boot_candidates(),
+        }
+    }
+    fn get_boot_volume(&self, next: bool) -> Result<BootCandidate> {
+        match self {
+            StartupDiskLibrary::AsahiBless(lib) => lib.get_boot_volume(next),
+            StartupDiskLibrary::Mock(lib) => lib.get_boot_volume(next),
         }
     }
     fn set_boot_volume(&self, cand: &BootCandidate, next: bool) -> Result<()> {

@@ -42,12 +42,16 @@ fn build_boot_candidates_box() -> Box {
     let mut last_button: Option<ToggleButton> = None;
 
     let startup_disk_library = startup_disk_library();
-
+    let default_cand = startup_disk_library.get_boot_volume(false).unwrap();
     let cands = startup_disk_library.get_boot_candidates().unwrap();
 
     for cand in cands {
+        let is_default: bool =
+            (cand.part_uuid == default_cand.part_uuid) && (cand.vg_uuid == default_cand.vg_uuid);
+
         let button = ToggleButton::builder()
             .label(cand.vol_names.join(", "))
+            .active(is_default)
             .margin_top(12)
             .margin_bottom(12)
             .margin_start(12)

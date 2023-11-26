@@ -17,7 +17,7 @@ checksum = "a4668cab20f66d8d020e1fbc0ebe47217433c1b6c8f2040faf858554e394ace6"
 [[package]]
 name = "apple-nvram"
 version = "0.2.1"
-source = "git+https://github.com/davide125/asahi-nvram.git?branch=lib#40d023e3e9b06a27c88158359fe7aba9bfa717ac"
+source = "git+https://github.com/davide125/asahi-nvram.git?branch=get#f5774b3f2e5a9bb9bda4e09c3d6882a958d37897"
 dependencies = [
  "adler32",
  "crc32fast",
@@ -27,7 +27,7 @@ dependencies = [
 [[package]]
 name = "asahi-bless"
 version = "0.2.0"
-source = "git+https://github.com/davide125/asahi-nvram.git?branch=lib#40d023e3e9b06a27c88158359fe7aba9bfa717ac"
+source = "git+https://github.com/davide125/asahi-nvram.git?branch=get#f5774b3f2e5a9bb9bda4e09c3d6882a958d37897"
 dependencies = [
  "apple-nvram",
  "gpt",
