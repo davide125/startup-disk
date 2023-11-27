@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Startup Disk
-Exec=startup-disk
+Exec=pkexec startup-disk
 Icon=org.gnome.StartupDisk
 Terminal=false
 Type=Application
