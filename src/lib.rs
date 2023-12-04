@@ -2,6 +2,7 @@ use asahi_bless::BootCandidate;
 use asahi_bless::Error;
 use rand::Rng;
 use std::env;
+use std::path::Path;
 use uuid::Uuid;
 
 type Result<T> = std::result::Result<T, Error>;
@@ -19,7 +20,12 @@ fn generate_random_strings(num_strings: usize, max_length: usize) -> Vec<String>
         .collect()
 }
 
+fn is_asahi() -> bool {
+    Path::new("/proc/device-tree/chosen/asahi,system-fw-version").exists()
+}
+
 pub trait StartupDiskTrait {
+    fn is_supported(&self) -> bool;
     fn needs_escalation(&self, method: &str) -> bool;
     fn get_boot_candidates(&self) -> Result<Vec<BootCandidate>>;
     fn get_boot_volume(&self, next: bool) -> Result<BootCandidate>;
@@ -28,6 +34,10 @@ pub trait StartupDiskTrait {
 
 struct AsahiBlessLibrary;
 impl StartupDiskTrait for AsahiBlessLibrary {
+    fn is_supported(&self) -> bool {
+        is_asahi()
+    }
+
     fn needs_escalation(&self, method: &str) -> bool {
         match method {
             "get_boot_candidates" => true,
@@ -52,6 +62,10 @@ impl StartupDiskTrait for AsahiBlessLibrary {
 
 struct MockLibrary;
 impl StartupDiskTrait for MockLibrary {
+    fn is_supported(&self) -> bool {
+        true
+    }
+
     fn needs_escalation(&self, _method: &str) -> bool {
         false
     }
@@ -101,6 +115,13 @@ enum StartupDiskLibrary {
 }
 
 impl StartupDiskTrait for StartupDiskLibrary {
+    fn is_supported(&self) -> bool {
+        match self {
+            StartupDiskLibrary::AsahiBless(lib) => lib.is_supported(),
+            StartupDiskLibrary::Mock(lib) => lib.is_supported(),
+        }
+    }
+
     fn needs_escalation(&self, method: &str) -> bool {
         match self {
             StartupDiskLibrary::AsahiBless(lib) => lib.needs_escalation(method),
