@@ -8,6 +8,11 @@ all: build
 build:
 	cargo build --release
 
+check:
+	cargo test --release
+	desktop-file-validate res/org.gnome.StartupDisk.desktop
+	appstream-util validate-relax res/org.gnome.StartupDisk.metainfo.xml
+
 install: install-bin install-data
 
 install-bin:
@@ -30,4 +35,4 @@ uninstall-data:
 	rm -f $(DESTDIR)$(DATADIR)/metainfo/org.gnome.StartupDisk.metainfo.xml
 	rm -f $(DESTDIR)$(DATADIR)/polkit-1/actions/org.gnome.StartupDisk.policy
 
-.PHONY: install-bin install-data uninstall-bin uninstall-data
+.PHONY: check install-bin install-data uninstall-bin uninstall-data
