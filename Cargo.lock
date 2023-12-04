@@ -17,7 +17,8 @@ checksum = "a4668cab20f66d8d020e1fbc0ebe47217433c1b6c8f2040faf858554e394ace6"
 [[package]]
 name = "apple-nvram"
 version = "0.2.1"
-source = "git+https://github.com/WhatAmISupposedToPutHere/asahi-nvram.git?rev=f5774b3f2e5a9bb9bda4e09c3d6882a958d37897#f5774b3f2e5a9bb9bda4e09c3d6882a958d37897"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5d520f375d98d1efa3ff09504ccc60924d5bd31f6b8f22d536e4870a36d9cc6c"
 dependencies = [
  "adler32",
  "crc32fast",
@@ -26,8 +27,9 @@ dependencies = [
 
 [[package]]
 name = "asahi-bless"
-version = "0.2.0"
-source = "git+https://github.com/WhatAmISupposedToPutHere/asahi-nvram.git?rev=f5774b3f2e5a9bb9bda4e09c3d6882a958d37897#f5774b3f2e5a9bb9bda4e09c3d6882a958d37897"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b0d0cf03f56163c237e6e0135c5adf6477632c22635ebef935f68e06ca192574"
 dependencies = [
  "apple-nvram",
  "gpt",
