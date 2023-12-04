@@ -1,0 +1,36 @@
+<Project xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/"
+         xmlns:gnome="http://api.gnome.org/doap-extensions#"
+         xmlns="http://usefulinc.com/ns/doap#">
+
+  <name xml:lang="en">Startup Disk</name>
+  <shortdesc xml:lang="en">Choose the startup volume</shortdesc>
+  <description xml:lang="en">Simple interface to choose the startup volume on Apple Silicon systems</description>
+  <homepage rdf:resource="https://gitlab.gnome.org/davide125/startup-disk"/>
+  <bug-database rdf:resource="https://gitlab.gnome.org/davide125/startup-disk/-/issues"/>
+  <category rdf:resource="http://api.gnome.org/doap-extensions#apps"/>
+
+  <programming-language>Rust</programming-language>
+  <platform>GTK 4</platform>
+  <platform>Libadwaita</platform>
+
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Davide Cavalca</foaf:name>
+      <foaf:mbox rdf:resource="mailto:davide@cavalca.name"/>
+      <foaf:account>
+        <foaf:OnlineAccount>
+          <foaf:accountServiceHomepage rdf:resource="https://github.com"/>
+          <foaf:accountName>davide125</foaf:accountName>
+        </foaf:OnlineAccount>
+      </foaf:account>
+      <foaf:account>
+        <foaf:OnlineAccount>
+          <foaf:accountServiceHomepage rdf:resource="https://gitlab.gnome.org"/>
+          <foaf:accountName>davide125</foaf:accountName>
+        </foaf:OnlineAccount>
+      </foaf:account>
+    </foaf:Person>
+  </maintainer>
+</Project>
