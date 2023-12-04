@@ -1,7 +1,7 @@
 image: "fedora:39"
 
 before_script:
-  - dnf install -y desktop-file-utils cargo gtk4-devel libadwaita-devel
+  - dnf install -y desktop-file-utils cargo gtk4-devel libadwaita-devel libappstream-glib
 
 test:cargo:
   script:
@@ -11,3 +11,7 @@ test:cargo:
 test:desktop:
   script:
     - desktop-file-validate res/org.gnome.StartupDisk.desktop
+
+test:metainfo:
+  script:
+    - appstream-util validate-relax res/org.gnome.StartupDisk.metainfo.xml
