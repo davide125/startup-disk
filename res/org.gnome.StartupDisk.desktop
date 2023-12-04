@@ -1,8 +1,9 @@
 [Desktop Entry]
 Name=Startup Disk
+Comment=Choose the startup volume
 Exec=pkexec startup-disk
 Icon=org.gnome.StartupDisk
 Terminal=false
 Type=Application
-Categories=Settings;
+Categories=GNOME;GTK;Utility;X-GNOME-Utilities;
 StartupNotify=true

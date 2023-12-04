@@ -1,9 +1,13 @@
 image: "fedora:39"
 
 before_script:
-  - dnf install -y cargo gtk4-devel libadwaita-devel
+  - dnf install -y desktop-file-utils cargo gtk4-devel libadwaita-devel
 
 test:cargo:
   script:
     - rustc --version && cargo --version  # Print version info for debugging
     - cargo test --workspace --verbose
+
+test:desktop:
+  script:
+    - desktop-file-validate res/org.gnome.StartupDisk.desktop

@@ -14,7 +14,7 @@ install-bin:
 	install -Dpm0755 -t $(DESTDIR)$(BINDIR)/ target/release/startup-disk
 
 install-data:
-	install -Dpm0644 -t $(DESTDIR)$(DATADIR)/applications/ res/org.gnome.StartupDisk.desktop
+	desktop-file-install --dir=$(DESTDIR)$(DATADIR)/applications/ res/org.gnome.StartupDisk.desktop
 	install -Dpm0644 -t $(DESTDIR)$(DATADIR)/icons/hicolor/scalable/apps/ res/org.gnome.StartupDisk.svg
 	install -Dpm0644 -t $(DESTDIR)$(DATADIR)/metainfo/ res/org.gnome.StartupDisk.metainfo.xml
 	install -Dpm0644 -t $(DESTDIR)$(DATADIR)/polkit-1/actions/ res/org.gnome.StartupDisk.policy
