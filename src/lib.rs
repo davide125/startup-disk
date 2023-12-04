@@ -150,7 +150,12 @@ impl StartupDiskTrait for StartupDiskLibrary {
 }
 
 pub fn startup_disk_library() -> &'static dyn StartupDiskTrait {
-    let use_mock_library = env::var("USE_MOCK_LIBRARY").is_ok();
+    let use_mock_library = if cfg!(debug_assertions) {
+        env::var("USE_MOCK_LIBRARY").is_ok() || !is_asahi()
+    } else {
+        env::var("USE_MOCK_LIBRARY").is_ok()
+    };
+
     // Create an instance of the chosen implementation
     let startup_disk_library: &dyn StartupDiskTrait = if use_mock_library {
         &StartupDiskLibrary::Mock(MockLibrary)
