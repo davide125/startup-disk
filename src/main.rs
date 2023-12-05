@@ -4,7 +4,6 @@ use adw::prelude::*;
 use adw::{
     AboutWindow, Application, ApplicationWindow, HeaderBar, MessageDialog, ResponseAppearance,
 };
-use const_format::concatcp;
 use gtk::{
     gio, glib, Box, FlowBox, Image, Label, MenuButton, Orientation, ScrolledWindow, ToggleButton,
 };
@@ -178,7 +177,7 @@ fn build_ui(app: &Application) {
 
 fn show_about() {
     let window = AboutWindow::from_appdata(
-        concatcp!(RESOURCE_BASE, "/", APP_ID, ".metainfo.xml"),
+        &format!("{}/{}.metainfo.xml", RESOURCE_BASE, APP_ID),
         Some(APP_VERSION),
     );
 
