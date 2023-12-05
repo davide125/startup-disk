@@ -116,7 +116,6 @@ fn build_app_window(app: &Application) -> ApplicationWindow {
     let label = Label::builder()
         .label("Select the disk you want to use to start up from")
         .margin_top(12)
-        .margin_bottom(12)
         .margin_start(12)
         .margin_end(12)
         .build();
