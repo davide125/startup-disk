@@ -84,12 +84,17 @@ fn build_boot_candidates() -> ScrolledWindow {
             .active(is_default)
             .build();
 
-        // Connect to "clicked" signal of `button`
-        button.connect_clicked(move |_button| {
-            if startup_disk_library.needs_escalation("set_boot_volume") {
-                sudo::escalate_if_needed().unwrap();
+        // Connect to "toggled" signal; this fires on every state change
+        button.connect_toggled(move |button| {
+            /* We only want to set the boot volume for the button that's being
+            toggled active (i.e. the one the user clicked, if it wasn't
+            active already. */
+            if button.is_active() {
+                if startup_disk_library.needs_escalation("set_boot_volume") {
+                    sudo::escalate_if_needed().unwrap();
+                }
+                startup_disk_library.set_boot_volume(&cand, false).unwrap();
             }
-            startup_disk_library.set_boot_volume(&cand, false).unwrap();
         });
 
         if let Some(ref last) = last_button {
