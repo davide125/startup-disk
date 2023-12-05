@@ -70,7 +70,7 @@ fn build_boot_candidates() -> ScrolledWindow {
         button_content.append(
             &Image::builder()
                 .icon_name("drive-harddisk")
-                .pixel_size(256)
+                .pixel_size(128)
                 .build(),
         );
         button_content.append(&Label::builder().label(&cand.vol_names[1]).build());
