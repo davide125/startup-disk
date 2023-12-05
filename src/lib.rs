@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 use asahi_bless::BootCandidate;
 use asahi_bless::Error;
 use rand::Rng;

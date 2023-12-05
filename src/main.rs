@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 use adw::prelude::*;
 use adw::{AboutWindow, Application, ApplicationWindow, HeaderBar};
 use const_format::concatcp;
