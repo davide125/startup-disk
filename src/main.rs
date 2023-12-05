@@ -129,6 +129,7 @@ fn build_app_window(app: &Application) -> ApplicationWindow {
         .application(app)
         .title(APP_NAME)
         .content(&content)
+        .resizable(false)
         .build()
 }
 
