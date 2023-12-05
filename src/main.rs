@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 
 use adw::prelude::*;
-use adw::{AboutWindow, Application, ApplicationWindow, HeaderBar};
+use adw::{
+    AboutWindow, Application, ApplicationWindow, HeaderBar, MessageDialog, ResponseAppearance,
+};
 use const_format::concatcp;
 use gtk::{
     gio, glib, Box, FlowBox, Image, Label, MenuButton, Orientation, ScrolledWindow, ToggleButton,
@@ -136,16 +138,37 @@ fn build_app_window(app: &Application) -> ApplicationWindow {
 }
 
 fn build_ui(app: &Application) {
-    // Get the current window or create one if necessary
-    let window = if let Some(window) = app.active_window() {
-        window
-    } else {
-        let window = build_app_window(app);
-        window.upcast()
-    };
+    let startup_disk_library = startup_disk_library();
+    if startup_disk_library.is_supported() {
+        // Get the current window or create one if necessary
+        let window = if let Some(window) = app.active_window() {
+            window
+        } else {
+            let window = build_app_window(app);
+            window.upcast()
+        };
 
-    // Present the window
-    window.present();
+        // Present the window
+        window.present();
+    } else {
+        let window = ApplicationWindow::builder()
+            .application(app)
+            .title(APP_NAME)
+            .build();
+        let dialog = MessageDialog::builder()
+            .heading(APP_NAME)
+            .body("Startup Disk is only supported on Apple Silicon Macs")
+            .transient_for(&window)
+            .modal(true)
+            .destroy_with_parent(true)
+            .build();
+        dialog.add_responses(&[("ok", "Ok")]);
+        dialog.set_response_appearance("ok", ResponseAppearance::Suggested);
+        dialog.connect_response(None, move |_dialog, _response| {
+            window.destroy();
+        });
+        dialog.present();
+    }
 }
 
 fn show_about() {
