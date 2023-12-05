@@ -10,6 +10,11 @@
       Simple interface to choose the startup volume on Apple Silicon systems
     </p>
   </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://gitlab.gnome.org/davide125/startup-disk/-/raw/main/res/screenshot.png</image>
+    </screenshot>
+  </screenshots>
   <developer_name>Davide Cavalca</developer_name>
   <url type="homepage">https://gitlab.gnome.org/davide125/startup-disk</url>
   <url type="bugtracker">https://gitlab.gnome.org/davide125/startup-disk/-/issues</url>
