@@ -20,6 +20,15 @@
   <url type="bugtracker">https://gitlab.gnome.org/davide125/startup-disk/-/issues</url>
   <project_group>GNOME</project_group>
   <content_rating type="oars-1.1"/>
+  <requires>
+    <display_length compare="ge">360</display_length>
+    <internet>offline-only</internet>
+  </requires>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </supports>
   <releases>
     <release version="0.1.0" type="development">
       <description>
