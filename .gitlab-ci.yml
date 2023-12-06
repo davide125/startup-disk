@@ -1,17 +1,13 @@
 image: "fedora:39"
 
+variables:
+  RUST_BACKTRACE: "full"
+  RUSTFLAGS: "--verbose"
+
 before_script:
-  - dnf install -y desktop-file-utils cargo gtk4-devel libadwaita-devel libappstream-glib
+  - dnf install -y desktop-file-utils cargo gtk4-devel libadwaita-devel libappstream-glib make
 
-test:cargo:
+test:
   script:
-    - rustc --version && cargo --version  # Print version info for debugging
-    - cargo test --workspace --verbose
-
-test:desktop:
-  script:
-    - desktop-file-validate res/org.gnome.StartupDisk.desktop
-
-test:metainfo:
-  script:
-    - appstream-util validate-relax res/org.gnome.StartupDisk.metainfo.xml
+    - make
+    - make check

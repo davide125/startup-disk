@@ -3,15 +3,24 @@ PREFIX ?= /usr
 BINDIR ?= $(PREFIX)/bin
 DATADIR ?= $(PREFIX)/share
 
+RUSTFLAGS ?= --release
+
 all: build
 
 build:
-	cargo build --release
+	cargo build $(RUSTFLAGS)
 
-check:
-	cargo test --release
+check: check-bin check-data
+
+check-bin:
+	cargo test $(RUSTFLAGS)
+
+check-data:
 	desktop-file-validate res/org.gnome.StartupDisk.desktop
-	appstream-util validate-relax res/org.gnome.StartupDisk.metainfo.xml
+	appstream-util validate-relax --nonet res/org.gnome.StartupDisk.metainfo.xml
+
+clean:
+	rm -rf target
 
 install: install-bin install-data
 
@@ -37,4 +46,4 @@ uninstall-data:
 	rm -f $(DESTDIR)$(DATADIR)/metainfo/org.gnome.StartupDisk.metainfo.xml
 	rm -f $(DESTDIR)$(DATADIR)/polkit-1/actions/org.gnome.StartupDisk.policy
 
-.PHONY: check install-bin install-data uninstall-bin uninstall-data
+.PHONY: check check-bin check-data install install-bin install-data uninstall uninstall-bin uninstall-data
