@@ -30,7 +30,7 @@ fn main() -> glib::ExitCode {
 
     // Hook up actions
     let about_action = gio::ActionEntry::builder("about")
-        .activate(|_, _, _| show_about())
+        .activate(|app: &Application, _, _| show_about(app))
         .build();
     let quit_action = gio::ActionEntry::builder("quit")
         .activate(|app: &Application, _, _| app.quit())
@@ -175,11 +175,13 @@ fn build_ui(app: &Application) {
     }
 }
 
-fn show_about() {
+fn show_about(app: &Application) {
     let window = AboutWindow::from_appdata(
         &format!("{}/{}.metainfo.xml", RESOURCE_BASE, APP_ID),
         Some(APP_VERSION),
     );
+    window.set_transient_for(app.active_window().as_ref());
+    window.set_destroy_with_parent(true);
 
     window.present();
 }
