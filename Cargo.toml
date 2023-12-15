@@ -12,7 +12,7 @@ categories = ["hardware-support"]
 keywords = ["gnome", "asahi"]
 
 [dependencies]
-adw = { version = "0.5.3", package = "libadwaita", features = ["v1_4"] }
+adw = { version = "0.5.2", package = "libadwaita", features = ["v1_4"] }
 asahi-bless = "0.2.1"
 gtk = { version = "0.7.3", package = "gtk4", features = ["gnome_45"] }
 rand = "0.8.5"
