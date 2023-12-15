@@ -1,10 +1,10 @@
-![Icon](res/org.gnome.StartupDisk.svg)
+![Icon](./res/org.gnome.StartupDisk.svg)
 
 # Startup Disk
 
 Startup Disk provides a simple interface to choose the startup volume on Apple Silicon Macs running [Asahi Linux](https://asahilinux.org/).
 
-![Screenshot](res/screenshot.png)
+![Screenshot](./res/screenshot.png)
 
 ## Status
 
