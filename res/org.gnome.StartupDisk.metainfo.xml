@@ -30,6 +30,13 @@
     <control>touch</control>
   </supports>
   <releases>
+    <release version="0.1.2" date="2022-12-15">
+      <description>
+        <p>
+          Fix the displayed app version to be consistent
+        </p>
+      </description>
+    </release>
     <release version="0.1.1" date="2022-12-15">
       <description>
         <p>
