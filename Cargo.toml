@@ -1,6 +1,6 @@
 [package]
 name = "startup-disk"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Davide Cavalca <davide@cavalca.name>"]
 edition = "2021"
 repository = "https://gitlab.gnome.org/davide125/startup-disk.git"

@@ -30,7 +30,14 @@
     <control>touch</control>
   </supports>
   <releases>
-    <release version="0.1.0" type="development">
+    <release version="0.1.1" date="2022-12-15">
+      <description>
+        <p>
+          Minor fixes to make packaging easier
+        </p>
+      </description>
+    </release>
+    <release version="0.1.0" date="2022-12-15">
       <description>
         <p>
 	  Initial release
