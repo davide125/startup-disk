@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/startup-disk">
-    <file compressed="true" preprocess="xml-stripblanks">org.gnome.StartupDisk.metainfo.xml</file>
+  <gresource prefix="org/startup-disk/StartupDisk">
+    <file compressed="true" preprocess="xml-stripblanks">org.startup_disk.StartupDisk.metainfo.xml</file>
   </gresource>
-  <gresource prefix="/org/gnome/startup-disk/gtk">
+  <gresource prefix="org/startup-disk/StartupDisk/gtk">
     <file compressed="true" preprocess="xml-stripblanks">menus.ui</file>
   </gresource>
 </gresources>

@@ -1,4 +1,4 @@
-![Icon](./res/org.gnome.StartupDisk.svg)
+![Icon](./res/org.startup_disk.StartupDisk.svg)
 
 # Startup Disk
 
@@ -24,4 +24,4 @@ Startup Disk is [MIT](https://spdx.org/licenses/MIT.html) licensed. See the [LIC
 
 Startup Disk is a GUI around [asahi-bless](https://crates.io/crates/asahi-bless) implemented with [gtk-rs](https://gtk-rs.org/) and [libadwaita-rs](https://crates.io/crates/libadwaita). See the [Cargo manifest](Cargo.toml) for additional dependencies that Startup Disk relies on.
 
-The [application icon](res/org.gnome.StartupDisk.svg) is a derived work of the Adwaita [hard disk icon](https://gitlab.gnome.org/GNOME/adwaita-icon-theme/-/blob/gnome-45/Adwaita/scalable/devices/drive-harddisk.svg) and the [GNOME Settings icon](https://gitlab.gnome.org/GNOME/gnome-control-center/-/blob/gnome-45/data/icons/hicolor/scalable/apps/org.gnome.Settings.svg); it was created using [Inkscape](https://inkscape.org/) and [App Icon Preview](https://gitlab.gnome.org/World/design/app-icon-preview); the latter was also used to create the [Devel variant](res/org.gnome.StartupDisk.Devel.svg).
+The [application icon](res/org.startup_disk.StartupDisk.svg) is a derived work of the Adwaita [hard disk icon](https://gitlab.gnome.org/GNOME/adwaita-icon-theme/-/blob/gnome-45/Adwaita/scalable/devices/drive-harddisk.svg) and the [GNOME Settings icon](https://gitlab.gnome.org/GNOME/gnome-control-center/-/blob/gnome-45/data/icons/hicolor/scalable/apps/org.gnome.Settings.svg); it was created using [Inkscape](https://inkscape.org/) and [App Icon Preview](https://gitlab.gnome.org/World/design/app-icon-preview); the latter was also used to create the [Devel variant](res/org.startup_disk.StartupDisk.Devel.svg).
