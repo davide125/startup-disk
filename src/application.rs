@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 mod imp {
-    use adw::glib::{self, object_subclass};
+    use adw::glib;
     use adw::prelude::*;
     use adw::subclass::prelude::*;
     use adw::Application;
@@ -12,7 +12,7 @@ mod imp {
     #[derive(Default)]
     pub struct StartupDiskApplication;
 
-    #[object_subclass]
+    #[glib::object_subclass]
     impl ObjectSubclass for StartupDiskApplication {
         const NAME: &'static str = "StartupDiskApplication";
         type Type = super::StartupDiskApplication;
@@ -51,14 +51,14 @@ mod imp {
 }
 
 use adw::gio::{self, ActionEntry, ActionGroup, ActionMap};
-use adw::glib::{wrapper, Object};
+use adw::glib;
 use adw::gtk;
 use adw::prelude::*;
 use adw::{AboutWindow, Application};
 
 use crate::config;
 
-wrapper! {
+glib::wrapper! {
     pub struct StartupDiskApplication(ObjectSubclass<imp::StartupDiskApplication>)
         @extends Application, gtk::Application, gio::Application,
         @implements ActionGroup, ActionMap;
@@ -66,7 +66,7 @@ wrapper! {
 
 impl StartupDiskApplication {
     pub fn new() -> Self {
-        Object::builder()
+        glib::Object::builder()
             .property("application-id", config::APP_ID)
             .property("resource-base-path", config::RESOURCE_BASE)
             .build()

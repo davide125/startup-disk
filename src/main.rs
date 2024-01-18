@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 mod application;
+mod boot_candidate;
 mod config;
 mod startup_disk;
 mod window;

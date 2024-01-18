@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <template class="StartupDiskBootCandidate" parent="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+            <object class="GtkLabel" id="name">
+                <property name="label">test</property>
+            </object>
+        </child>
+    </template>
+</interface>
