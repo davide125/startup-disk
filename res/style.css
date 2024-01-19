@@ -1,0 +1,16 @@
+.candidate_gridview {
+    padding-bottom: 12px;
+}
+
+.candidate_gridview child {
+    margin: 12px 6px 0 6px;
+    background-color: alpha(@view_fg_color, 0.1);
+}
+
+.candidate_gridview child:hover {
+    background-color: alpha(@view_fg_color, 0.15);
+}
+
+.candidate_gridview child:selected {
+    background-color: alpha(@view_fg_color, 0.3);
+}

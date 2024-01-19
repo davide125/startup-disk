@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="org/startup-disk/StartupDisk">
+    <file compressed="true">style.css</file>
     <file compressed="true" preprocess="xml-stripblanks">org.startup_disk.StartupDisk.metainfo.xml</file>
   </gresource>
   <gresource prefix="org/startup-disk/StartupDisk/gtk">
