@@ -31,18 +31,14 @@ mod imp {
             let app = self.obj();
 
             let startup_disk_library = startup_disk_library();
-            if startup_disk_library.is_supported() {
-                let window = if let Some(window) = app.active_window() {
-                    window
-                } else {
-                    let window = StartupDiskWindow::new(&*app);
-                    window.upcast()
-                };
-
-                window.present();
+            let window = if let Some(window) = app.active_window() {
+                window
             } else {
-                todo!("Implement better unsupported screen");
-            }
+                let window = StartupDiskWindow::new(&*app, startup_disk_library.is_supported());
+                window.upcast()
+            };
+
+            window.present();
         }
     }
 

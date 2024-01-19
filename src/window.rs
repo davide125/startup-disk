@@ -3,17 +3,27 @@
 mod imp {
     use adw::gio::ListStore;
     use adw::glib::{self, subclass::InitializingObject};
+    use adw::prelude::*;
     use adw::subclass::prelude::*;
-    use adw::{gtk::GridView, ApplicationWindow};
+    use adw::{
+        gtk::{GridView, Stack},
+        ApplicationWindow,
+    };
     use std::cell::RefCell;
 
-    #[derive(gtk::CompositeTemplate, Default)]
+    #[derive(gtk::CompositeTemplate, glib::Properties, Default)]
     #[template(resource = "/org/startup-disk/StartupDisk/gtk/window.ui")]
+    #[properties(wrapper_type = super::StartupDiskWindow)]
     pub struct StartupDiskWindow {
+        #[template_child]
+        pub stack: TemplateChild<Stack>,
         #[template_child]
         pub grid_view: TemplateChild<GridView>,
 
         pub boot_candidates: RefCell<Option<ListStore>>,
+
+        #[property(get, set)]
+        supported: RefCell<bool>,
     }
 
     #[glib::object_subclass]
@@ -39,8 +49,25 @@ mod imp {
             self.obj().setup_list_store();
             self.obj().setup_factory();
 
-            // Add candidates
-            self.obj().add_boot_candidates();
+            // Add signal for supported property
+            self.obj().connect_notify(Some("supported"), |window, _| {
+                if window.supported() {
+                    window.add_boot_candidates();
+                    window.imp().stack.set_visible_child_name("boot_candidates");
+                }
+            });
+        }
+
+        fn properties() -> &'static [glib::ParamSpec] {
+            Self::derived_properties()
+        }
+
+        fn set_property(&self, id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
+            self.derived_set_property(id, value, pspec);
+        }
+
+        fn property(&self, id: usize, pspec: &glib::ParamSpec) -> glib::Value {
+            self.derived_property(id, pspec)
         }
     }
 
@@ -72,9 +99,10 @@ glib::wrapper! {
 }
 
 impl StartupDiskWindow {
-    pub fn new<A: IsA<Application>>(application: &A) -> Self {
+    pub fn new<A: IsA<Application>>(application: &A, supported: bool) -> Self {
         glib::Object::builder()
             .property("application", application)
+            .property("supported", supported)
             .build()
     }
 

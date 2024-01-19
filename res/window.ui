@@ -25,41 +25,65 @@
                     </object>
                 </child>
                 <child>
-                    <object class="GtkBox">
-                        <property name="orientation">vertical</property>
+                    <object class="GtkStack" id="stack">
                         <child>
-                            <object class="GtkLabel">
-                                <property name="label">Select the disk you want to use to start up from</property>
-                                <property name="margin-top">12</property>
-                                <property name="margin-bottom">12</property>
-                                <property name="margin-start">12</property>
-                                <property name="margin-end">12</property>
+                            <object class="GtkStackPage">
+                                <property name="name">unsupported</property>
+                                <property name="child">
+                                    <object class="AdwStatusPage">
+                                        <property name="icon-name">dialog-error-symbolic</property>
+                                        <property name="title">Unsupported</property>
+                                        <property name="description">Startup Disk is only supported on Apple Silicon Macs</property>
+                                        <style>
+                                            <class name="compact"/>
+                                        </style>
+                                    </object>
+                                </property>
                             </object>
                         </child>
                         <child>
-                            <object class="GtkSeparator"/>
-                        </child>
-                        <child>
-                            <object class="GtkScrolledWindow">
-                                <property name="propagate-natural-height">True</property>
+                            <object class="GtkStackPage">
+                                <property name="name">boot_candidates</property>
                                 <property name="child">
-                                    <object class="AdwClampScrollable">
-                                        <property name="child">
-                                            <object class="GtkGridView" id="grid_view">
-                                                <property name="max-columns">2</property>
-                                                <property name="vexpand">True</property>
-                                                <property name="margin-start">6</property>
-                                                <property name="margin-end">6</property>
+                                    <object class="GtkBox">
+                                        <property name="orientation">vertical</property>
+                                        <child>
+                                            <object class="GtkLabel">
+                                                <property name="label">Select the disk you want to use to start up from</property>
+                                                <property name="margin-top">12</property>
+                                                <property name="margin-bottom">12</property>
+                                                <property name="margin-start">12</property>
+                                                <property name="margin-end">12</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkSeparator"/>
+                                        </child>
+                                        <child>
+                                            <object class="GtkScrolledWindow">
+                                                <property name="propagate-natural-height">True</property>
+                                                <property name="child">
+                                                    <object class="AdwClampScrollable">
+                                                        <property name="child">
+                                                            <object class="GtkGridView" id="grid_view">
+                                                                <property name="max-columns">2</property>
+                                                                <property name="vexpand">True</property>
+                                                                <property name="margin-start">6</property>
+                                                                <property name="margin-end">6</property>
+                                                                <style>
+                                                                    <class name="candidate_gridview"/>
+                                                                </style>
+                                                            </object>
+                                                        </property>
+                                                    </object>
+                                                </property>
                                                 <style>
-                                                    <class name="candidate_gridview"/>
+                                                    <class name="view"/>
                                                 </style>
                                             </object>
-                                        </property>
+                                        </child>
                                     </object>
                                 </property>
-                                <style>
-                                    <class name="view"/>
-                                </style>
                             </object>
                         </child>
                     </object>
