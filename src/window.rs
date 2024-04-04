@@ -78,7 +78,7 @@ mod imp {
 }
 
 use adw::gio::{ActionGroup, ActionMap, ListStore};
-use adw::glib::{self, subclass::types::ObjectSubclassIsExt, IsA};
+use adw::glib::{self, subclass::types::ObjectSubclassIsExt};
 use adw::prelude::*;
 use adw::{
     gtk::{
