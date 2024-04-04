@@ -91,3 +91,9 @@ impl StartupDiskApplication {
         about_window.present();
     }
 }
+
+impl Default for StartupDiskApplication {
+    fn default() -> Self {
+        Self::new()
+    }
+}

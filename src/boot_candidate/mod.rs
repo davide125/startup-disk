@@ -76,3 +76,9 @@ impl BootCandidateWidget {
         }
     }
 }
+
+impl Default for BootCandidateWidget {
+    fn default() -> Self {
+        Self::new()
+    }
+}
