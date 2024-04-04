@@ -1,5 +1,6 @@
 .candidate_gridview {
     padding-bottom: 12px;
+    background-color: @theme_bg_color;
 }
 
 .candidate_gridview child {
