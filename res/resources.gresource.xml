@@ -3,8 +3,6 @@
   <gresource prefix="org/startup-disk/StartupDisk">
     <file compressed="true">style.css</file>
     <file compressed="true" preprocess="xml-stripblanks">org.startup_disk.StartupDisk.metainfo.xml</file>
-  </gresource>
-  <gresource prefix="org/startup-disk/StartupDisk/gtk">
     <file compressed="true" preprocess="xml-stripblanks">window.ui</file>
     <file compressed="true" preprocess="xml-stripblanks">boot_candidate.ui</file>
   </gresource>

@@ -12,7 +12,7 @@ mod imp {
     use std::cell::RefCell;
 
     #[derive(gtk::CompositeTemplate, glib::Properties, Default)]
-    #[template(resource = "/org/startup-disk/StartupDisk/gtk/window.ui")]
+    #[template(resource = "/org/startup-disk/StartupDisk/window.ui")]
     #[properties(wrapper_type = super::StartupDiskWindow)]
     pub struct StartupDiskWindow {
         #[template_child]

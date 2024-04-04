@@ -9,7 +9,7 @@ mod imp {
     use std::cell::RefCell;
 
     #[derive(Default, CompositeTemplate)]
-    #[template(resource = "/org/startup-disk/StartupDisk/gtk/boot_candidate.ui")]
+    #[template(resource = "/org/startup-disk/StartupDisk/boot_candidate.ui")]
     pub struct BootCandidateWidget {
         #[template_child]
         pub name: TemplateChild<Label>,
