@@ -25,11 +25,11 @@ impl StartupDiskTrait for AsahiBlessLibrary {
         asahi_bless::get_boot_candidates()
     }
 
-    fn get_boot_volume(&self, next: bool) -> Result<BootCandidate> {
-        asahi_bless::get_boot_volume(next)
+    fn get_boot_volume(&self, device: &str, next: bool) -> Result<BootCandidate> {
+        asahi_bless::get_boot_volume(device, next)
     }
 
-    fn set_boot_volume(&self, cand: &BootCandidate, next: bool) -> Result<()> {
-        asahi_bless::set_boot_volume(cand, next)
+    fn set_boot_volume(&self, device: &str, cand: &BootCandidate, next: bool) -> Result<()> {
+        asahi_bless::set_boot_volume(device, cand, next)
     }
 }

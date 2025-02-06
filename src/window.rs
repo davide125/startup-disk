@@ -128,6 +128,7 @@ impl StartupDiskWindow {
                 }
                 startup_disk_library
                     .set_boot_volume(
+                        "/dev/mtd/by-name/nvram",
                         object.imp().boot_candidate.borrow().as_ref().unwrap(),
                         false,
                     )
@@ -183,7 +184,9 @@ impl StartupDiskWindow {
         if startup_disk_library.needs_escalation("get_boot_volume") {
             sudo::escalate_if_needed().unwrap();
         }
-        let default_cand = startup_disk_library.get_boot_volume(false).unwrap();
+        let default_cand = startup_disk_library
+            .get_boot_volume("/dev/mtd/by-name/nvram", false)
+            .unwrap();
 
         // Add boot candidates to list store
         if startup_disk_library.needs_escalation("get_boot_candidates") {

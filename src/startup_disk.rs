@@ -3,8 +3,8 @@
 mod asahi;
 mod mock;
 
-use asahi_bless::BootCandidate;
 use asahi_bless::Error;
+use asahi_bless::{BootCandidate, Volume};
 use std::env;
 use std::path::Path;
 
@@ -18,8 +18,8 @@ pub trait StartupDiskTrait {
     fn is_supported(&self) -> bool;
     fn needs_escalation(&self, method: &str) -> bool;
     fn get_boot_candidates(&self) -> Result<Vec<BootCandidate>>;
-    fn get_boot_volume(&self, next: bool) -> Result<BootCandidate>;
-    fn set_boot_volume(&self, cand: &BootCandidate, next: bool) -> Result<()>;
+    fn get_boot_volume(&self, device: &str, next: bool) -> Result<BootCandidate>;
+    fn set_boot_volume(&self, device: &str, cand: &BootCandidate, next: bool) -> Result<()>;
 }
 
 enum StartupDiskLibrary {
@@ -48,18 +48,27 @@ impl StartupDiskTrait for StartupDiskLibrary {
             StartupDiskLibrary::Mock(lib) => lib.get_boot_candidates(),
         }
     }
-    fn get_boot_volume(&self, next: bool) -> Result<BootCandidate> {
+    fn get_boot_volume(&self, device: &str, next: bool) -> Result<BootCandidate> {
         match self {
-            StartupDiskLibrary::AsahiBless(lib) => lib.get_boot_volume(next),
-            StartupDiskLibrary::Mock(lib) => lib.get_boot_volume(next),
+            StartupDiskLibrary::AsahiBless(lib) => lib.get_boot_volume(device, next),
+            StartupDiskLibrary::Mock(lib) => lib.get_boot_volume(device, next),
         }
     }
-    fn set_boot_volume(&self, cand: &BootCandidate, next: bool) -> Result<()> {
+    fn set_boot_volume(&self, device: &str, cand: &BootCandidate, next: bool) -> Result<()> {
         match self {
-            StartupDiskLibrary::AsahiBless(lib) => lib.set_boot_volume(cand, next),
-            StartupDiskLibrary::Mock(lib) => lib.set_boot_volume(cand, next),
+            StartupDiskLibrary::AsahiBless(lib) => lib.set_boot_volume(device, cand, next),
+            StartupDiskLibrary::Mock(lib) => lib.set_boot_volume(device, cand, next),
         }
     }
+}
+
+pub fn get_vg_name(vg: &[Volume]) -> &str {
+    for v in vg {
+        if v.is_system {
+            return &v.name;
+        }
+    }
+    &vg[0].name
 }
 
 pub fn startup_disk_library() -> &'static dyn StartupDiskTrait {

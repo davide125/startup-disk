@@ -1,22 +1,33 @@
 // SPDX-License-Identifier: MIT
 
-use asahi_bless::BootCandidate;
+use asahi_bless::{BootCandidate, Volume};
 
 use rand::Rng;
 use uuid::Uuid;
 
+use crate::startup_disk::get_vg_name;
 use crate::startup_disk::Result;
 use crate::startup_disk::StartupDiskTrait;
 
-fn generate_random_strings(num_strings: usize, max_length: usize) -> Vec<String> {
+fn generate_random_volumes(
+    num_volumes: usize,
+    max_length: usize,
+    is_system: &[bool],
+) -> Vec<Volume> {
     let mut rng = rand::thread_rng();
 
-    (0..num_strings)
-        .map(|_| {
+    (0..num_volumes)
+        .map(|n| {
             let string_length = rng.gen_range(1..=max_length);
-            (0..string_length)
-                .map(|_| rng.gen_range(b'a'..=b'z') as char)
-                .collect()
+            let name = {
+                (0..string_length)
+                    .map(|_| rng.gen_range(b'a'..=b'z') as char)
+                    .collect()
+            };
+            Volume {
+                name: name,
+                is_system: is_system[n],
+            }
         })
         .collect()
 }
@@ -35,35 +46,35 @@ impl StartupDiskTrait for MockLibrary {
         let cands: Vec<BootCandidate> = vec![
             BootCandidate {
                 vg_uuid: Uuid::new_v4(),
-                vol_names: generate_random_strings(2, 10),
+                volumes: generate_random_volumes(2, 10, &[true, false]),
                 part_uuid: Uuid::new_v4(),
             },
             BootCandidate {
                 vg_uuid: Uuid::new_v4(),
-                vol_names: generate_random_strings(2, 10),
+                volumes: generate_random_volumes(2, 10, &[false, true]),
                 part_uuid: Uuid::new_v4(),
             },
             BootCandidate {
                 vg_uuid: Uuid::new_v4(),
-                vol_names: generate_random_strings(2, 10),
+                volumes: generate_random_volumes(2, 10, &[false, false]),
                 part_uuid: Uuid::new_v4(),
             },
         ];
         Ok(cands)
     }
 
-    fn get_boot_volume(&self, _next: bool) -> Result<BootCandidate> {
+    fn get_boot_volume(&self, _device: &str, _next: bool) -> Result<BootCandidate> {
         Ok(BootCandidate {
             vg_uuid: Uuid::new_v4(),
-            vol_names: Vec::new(),
+            volumes: Vec::new(),
             part_uuid: Uuid::new_v4(),
         })
     }
 
-    fn set_boot_volume(&self, cand: &BootCandidate, next: bool) -> Result<()> {
+    fn set_boot_volume(&self, _device: &str, cand: &BootCandidate, next: bool) -> Result<()> {
         println!(
             "Setting boot volume: {} {}",
-            cand.vol_names.join(", "),
+            get_vg_name(&cand.volumes),
             next
         );
         Ok(())

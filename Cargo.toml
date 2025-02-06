@@ -13,7 +13,7 @@ keywords = ["gnome", "asahi"]
 
 [dependencies]
 adw = { version = "0.6.0", package = "libadwaita", features = ["v1_4"] }
-asahi-bless = "0.3"
+asahi-bless = "0.4.2"
 gtk = { version = "0.8.2", package = "gtk4", features = ["gnome_45"] }
 rand = "0.8.5"
 sudo = "0.6"

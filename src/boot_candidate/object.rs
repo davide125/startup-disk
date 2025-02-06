@@ -37,6 +37,7 @@ mod imp {
     }
 }
 
+use crate::startup_disk::get_vg_name;
 use adw::glib::{self, subclass::types::ObjectSubclassIsExt};
 use asahi_bless::BootCandidate;
 
@@ -47,7 +48,7 @@ glib::wrapper! {
 impl BootCandidateObject {
     pub fn new(candidate: BootCandidate) -> Self {
         let object: BootCandidateObject = glib::Object::builder()
-            .property("name", &candidate.vol_names[1])
+            .property("name", get_vg_name(&candidate.volumes))
             .build();
         *object.imp().boot_candidate.borrow_mut() = Some(candidate);
 
