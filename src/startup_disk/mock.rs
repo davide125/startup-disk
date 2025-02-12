@@ -25,7 +25,7 @@ fn generate_random_volumes(
                     .collect()
             };
             Volume {
-                name: name,
+                name,
                 is_system: is_system[n],
             }
         })
