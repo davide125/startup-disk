@@ -50,7 +50,7 @@ use adw::gio::{self, ActionEntry, ActionGroup, ActionMap};
 use adw::glib;
 use adw::gtk;
 use adw::prelude::*;
-use adw::{AboutWindow, Application};
+use adw::{AboutDialog, Application};
 
 use crate::config;
 
@@ -81,14 +81,12 @@ impl StartupDiskApplication {
     }
 
     fn show_about(&self) {
-        let about_window = AboutWindow::from_appdata(
+        let about_dialog = AboutDialog::from_appdata(
             &format!("{}/{}.metainfo.xml", config::RESOURCE_BASE, config::APP_ID),
             Some(config::APP_VERSION),
         );
-        about_window.set_transient_for(self.active_window().as_ref());
-        about_window.set_destroy_with_parent(true);
 
-        about_window.present();
+        about_dialog.present(self.active_window().as_ref());
     }
 }
 
