@@ -14,14 +14,14 @@ fn generate_random_volumes(
     max_length: usize,
     is_system: &[bool],
 ) -> Vec<Volume> {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
 
     (0..num_volumes)
         .map(|n| {
-            let string_length = rng.gen_range(1..=max_length);
+            let string_length = rng.random_range(1..=max_length);
             let name = {
                 (0..string_length)
-                    .map(|_| rng.gen_range(b'a'..=b'z') as char)
+                    .map(|_| rng.random_range(b'a'..=b'z') as char)
                     .collect()
             };
             Volume {
