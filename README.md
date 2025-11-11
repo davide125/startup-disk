@@ -8,7 +8,7 @@ Startup Disk provides a simple interface to choose the startup volume on Apple S
 
 ## Status
 
-Basic functionality is implemented and works. While Startup Disk should be safe in normal operation, error checking is minimal to nonexistent. In particular, races and corruption are possible if multiple writers attempt to access the NVRAM at the same time -- do not run multiple copies of Startup Disk at the same time, and do not run Startup Disk concurrently with `asahi-bless`, `asahi-nvram` or other tools that access the NVRAM. If something goes _very_ wrong, you might have to perform a [DFU restore](https://support.apple.com/guide/apple-configurator-mac/revive-or-restore-a-mac-with-apple-silicon-apdd5f3c75ad/mac).
+Basic functionality is implemented and works. While Startup Disk should be safe in normal operation, error checking is minimal to nonexistent. In particular, races and corruption are possible if multiple writers attempt to access the NVRAM at the same time -- do not run multiple copies of Startup Disk at the same time, and do not run Startup Disk concurrently with `asahi-bless`, `asahi-nvram` or other tools that access the NVRAM. If something goes _very_ wrong, you might have to perform a [DFU restore](https://support.apple.com/en-us/108900).
 
 ## Contributing
 
