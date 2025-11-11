@@ -1,4 +1,4 @@
-image: "fedora:41"
+image: "fedora:43"
 
 variables:
   RUST_BACKTRACE: "full"
