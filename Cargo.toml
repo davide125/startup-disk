@@ -17,7 +17,7 @@ asahi-bless = "0.4.2"
 gtk = { version = "0.9.5", package = "gtk4", features = ["gnome_47"] }
 rand = "0.9"
 sudo = "0.6"
-uuid = "1.11"
+uuid = "1.18"
 
 [build-dependencies]
-glib-build-tools = "0.18.0"
+glib-build-tools = "0.20.0"
