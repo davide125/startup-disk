@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Startup Disk
 Comment=Choose the startup volume
-Exec=pkexec startup-disk
+Exec=startup-disk
 Icon=org.startup_disk.StartupDisk
 Terminal=false
 Type=Application
