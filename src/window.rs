@@ -123,9 +123,6 @@ impl StartupDiskWindow {
                 .and_downcast::<BootCandidateObject>()
             {
                 let startup_disk_library = startup_disk_library();
-                if startup_disk_library.needs_escalation("set_boot_volume") {
-                    sudo::escalate_if_needed().unwrap();
-                }
                 startup_disk_library
                     .set_boot_volume(
                         "/dev/mtd/by-name/nvram",
@@ -181,18 +178,11 @@ impl StartupDiskWindow {
         let startup_disk_library = startup_disk_library();
 
         // Get default boot candidate
-        if startup_disk_library.needs_escalation("get_boot_volume") {
-            sudo::escalate_if_needed().unwrap();
-        }
         let default_cand = startup_disk_library
             .get_boot_volume("/dev/mtd/by-name/nvram", false)
             .unwrap();
 
         // Add boot candidates to list store
-        if startup_disk_library.needs_escalation("get_boot_candidates") {
-            sudo::escalate_if_needed().unwrap();
-        }
-
         for (idx, cand) in startup_disk_library
             .get_boot_candidates()
             .unwrap()
