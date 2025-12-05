@@ -38,10 +38,6 @@ impl StartupDiskTrait for MockLibrary {
         true
     }
 
-    fn needs_escalation(&self, _method: &str) -> bool {
-        false
-    }
-
     fn get_boot_candidates(&self) -> Result<Vec<BootCandidate>> {
         let cands: Vec<BootCandidate> = vec![
             BootCandidate {
