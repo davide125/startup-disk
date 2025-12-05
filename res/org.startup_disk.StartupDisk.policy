@@ -8,12 +8,12 @@
 
   <action id="org.gnome.pkexec.startup-disk">
     <description>Run Startup Disk</description>
-    <message>Authentication is required to run Startup Disk</message>
+    <message>Authentication is required to manage and view startup disks</message>
     <icon_name>org.startup_disk.StartupDisk</icon_name>
     <defaults>
       <allow_any>auth_admin_keep</allow_any>
       <allow_inactive>auth_admin_keep</allow_inactive>
-      <allow_active>yes</allow_active>
+      <allow_active>auth_admin_keep</allow_active>
     </defaults>
     <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/startup-disk</annotate>
     <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
