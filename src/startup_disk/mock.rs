@@ -2,7 +2,7 @@
 
 use asahi_bless::{BootCandidate, Volume};
 
-use rand::Rng;
+use rand::RngExt;
 use uuid::Uuid;
 
 use crate::startup_disk::get_vg_name;
