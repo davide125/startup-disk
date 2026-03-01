@@ -7,7 +7,7 @@ mod imp {
     use adw::subclass::prelude::*;
     use adw::{
         gtk::{GridView, Stack},
-        ApplicationWindow,
+        ApplicationWindow, StatusPage,
     };
     use std::cell::RefCell;
 
@@ -19,6 +19,8 @@ mod imp {
         pub stack: TemplateChild<Stack>,
         #[template_child]
         pub grid_view: TemplateChild<GridView>,
+        #[template_child]
+        pub error_status_page: TemplateChild<StatusPage>,
 
         pub boot_candidates: RefCell<Option<ListStore>>,
 
@@ -52,8 +54,18 @@ mod imp {
             // Add signal for supported property
             self.obj().connect_notify(Some("supported"), |window, _| {
                 if window.supported() {
-                    window.add_boot_candidates();
-                    window.imp().stack.set_visible_child_name("boot_candidates");
+                    match window.add_boot_candidates() {
+                        Ok(()) => {
+                            window.imp().stack.set_visible_child_name("boot_candidates");
+                        }
+                        Err(e) => {
+                            window
+                                .imp()
+                                .error_status_page
+                                .set_description(Some(&e.to_string()));
+                            window.imp().stack.set_visible_child_name("error");
+                        }
+                    }
                 }
             });
         }
@@ -90,7 +102,7 @@ use adw::{
 
 use crate::boot_candidate::object::BootCandidateObject;
 use crate::boot_candidate::BootCandidateWidget;
-use crate::startup_disk::startup_disk_library;
+use crate::startup_disk::{startup_disk_library, StartupDiskError};
 
 glib::wrapper! {
     pub struct StartupDiskWindow(ObjectSubclass<imp::StartupDiskWindow>)
@@ -117,19 +129,25 @@ impl StartupDiskWindow {
         self.imp().boot_candidates.replace(Some(list_store));
 
         let selection_model = adw::gtk::SingleSelection::new(Some(self.get_list_store()));
-        selection_model.connect_selection_changed(|selection, _, _| {
+        let window = self.clone();
+        selection_model.connect_selection_changed(move |selection, _, _| {
             if let Some(object) = selection
                 .selected_item()
                 .and_downcast::<BootCandidateObject>()
             {
                 let startup_disk_library = startup_disk_library();
-                startup_disk_library
-                    .set_boot_volume(
-                        "/dev/mtd/by-name/nvram",
-                        object.imp().boot_candidate.borrow().as_ref().unwrap(),
-                        false,
-                    )
-                    .unwrap();
+                if let Err(e) = startup_disk_library.set_boot_volume(
+                    "/dev/mtd/by-name/nvram",
+                    object.imp().boot_candidate.borrow().as_ref().unwrap(),
+                    false,
+                ) {
+                    let dialog = adw::AlertDialog::builder()
+                        .heading("Could Not Set Boot Volume")
+                        .body(e.to_string())
+                        .build();
+                    dialog.add_response("ok", "OK");
+                    dialog.present(Some(&window));
+                }
             }
         });
         self.imp().grid_view.set_model(Some(&selection_model));
@@ -174,18 +192,16 @@ impl StartupDiskWindow {
         self.imp().grid_view.set_factory(Some(&factory));
     }
 
-    fn add_boot_candidates(&self) {
+    fn add_boot_candidates(&self) -> Result<(), StartupDiskError> {
         let startup_disk_library = startup_disk_library();
 
         // Get default boot candidate
         let default_cand = startup_disk_library
-            .get_boot_volume("/dev/mtd/by-name/nvram", false)
-            .unwrap();
+            .get_boot_volume("/dev/mtd/by-name/nvram", false)?;
 
         // Add boot candidates to list store
         for (idx, cand) in startup_disk_library
-            .get_boot_candidates()
-            .unwrap()
+            .get_boot_candidates()?
             .into_iter()
             .enumerate()
         {
@@ -203,5 +219,6 @@ impl StartupDiskWindow {
                     .select_item(idx as u32, true);
             }
         }
+        Ok(())
     }
 }

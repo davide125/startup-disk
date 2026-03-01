@@ -43,6 +43,20 @@
                         </child>
                         <child>
                             <object class="GtkStackPage">
+                                <property name="name">error</property>
+                                <property name="child">
+                                    <object class="AdwStatusPage" id="error_status_page">
+                                        <property name="icon-name">dialog-error-symbolic</property>
+                                        <property name="title">Could Not Load Boot Options</property>
+                                        <style>
+                                            <class name="compact"/>
+                                        </style>
+                                    </object>
+                                </property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkStackPage">
                                 <property name="name">boot_candidates</property>
                                 <property name="child">
                                     <object class="GtkBox">
