@@ -10,6 +10,7 @@
     </menu>
     <template class="StartupDiskWindow" parent="AdwApplicationWindow">
         <property name="title">Startup Disk</property>
+        <property name="visible">false</property>
         <property name="content">
             <object class="GtkBox">
                 <property name="orientation">vertical</property>
@@ -28,26 +29,21 @@
                     <object class="GtkStack" id="stack">
                         <child>
                             <object class="GtkStackPage">
-                                <property name="name">unsupported</property>
-                                <property name="child">
-                                    <object class="AdwStatusPage">
-                                        <property name="icon-name">dialog-error-symbolic</property>
-                                        <property name="title">Unsupported</property>
-                                        <property name="description">Startup Disk is only supported on Apple Silicon Macs</property>
-                                        <style>
-                                            <class name="compact"/>
-                                        </style>
-                                    </object>
-                                </property>
-                            </object>
-                        </child>
-                        <child>
-                            <object class="GtkStackPage">
                                 <property name="name">error</property>
                                 <property name="child">
                                     <object class="AdwStatusPage" id="error_status_page">
                                         <property name="icon-name">dialog-error-symbolic</property>
-                                        <property name="title">Could Not Load Boot Options</property>
+                                        <property name="title">Something went wrong</property>
+                                        <property name="child">
+                                            <object class="GtkButton" id="retry_button">
+                                                <property name="label">Retry</property>
+                                                <property name="halign">center</property>
+                                                <style>
+                                                    <class name="pill"/>
+                                                    <class name="suggested-action"/>
+                                                </style>
+                                            </object>
+                                        </property>
                                         <style>
                                             <class name="compact"/>
                                         </style>
@@ -77,13 +73,13 @@
                                                     <object class="AdwClampScrollable">
                                                         <property name="child">
                                                             <object class="GtkGridView" id="grid_view">
-                                                                <property name="max-columns">2</property>
-                                                                <property name="vexpand">True</property>
-                                                                <property name="margin-start">6</property>
-                                                                <property name="margin-end">6</property>
-                                                                <style>
-                                                                    <class name="candidate_gridview"/>
-                                                                </style>
+                                                            <property name="max-columns">2</property>
+                                                            <property name="vexpand">True</property>
+                                                            <property name="margin-start">6</property>
+                                                            <property name="margin-end">6</property>
+                                                            <style>
+                                                            <class name="candidate_gridview"/>
+                                                            </style>
                                                             </object>
                                                         </property>
                                                     </object>

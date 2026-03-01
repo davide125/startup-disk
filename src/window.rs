@@ -6,10 +6,10 @@ mod imp {
     use adw::prelude::*;
     use adw::subclass::prelude::*;
     use adw::{
-        gtk::{GridView, Stack},
+        gtk::{Button, GridView, Stack},
         ApplicationWindow, StatusPage,
     };
-    use std::cell::RefCell;
+    use std::cell::{Cell, RefCell};
 
     #[derive(gtk::CompositeTemplate, glib::Properties, Default)]
     #[template(resource = "/org/startup-disk/StartupDisk/window.ui")]
@@ -21,8 +21,12 @@ mod imp {
         pub grid_view: TemplateChild<GridView>,
         #[template_child]
         pub error_status_page: TemplateChild<StatusPage>,
+        #[template_child]
+        pub retry_button: TemplateChild<Button>,
 
         pub boot_candidates: RefCell<Option<ListStore>>,
+        pub confirmed_selection: Cell<u32>,
+        pub changing_selection: Cell<bool>,
 
         #[property(get, set)]
         supported: RefCell<bool>,
@@ -51,21 +55,23 @@ mod imp {
             self.obj().setup_list_store();
             self.obj().setup_factory();
 
-            // Add signal for supported property
             self.obj().connect_notify(Some("supported"), |window, _| {
                 if window.supported() {
-                    match window.add_boot_candidates() {
-                        Ok(()) => {
-                            window.imp().stack.set_visible_child_name("boot_candidates");
-                        }
-                        Err(e) => {
-                            window
-                                .imp()
-                                .error_status_page
-                                .set_description(Some(&e.to_string()));
-                            window.imp().stack.set_visible_child_name("error");
-                        }
-                    }
+                    window.try_load_boot_candidates();
+                } else {
+                    window.show_error(
+                        "Startup Disk is only supported on Apple Silicon Macs",
+                        false,
+                    );
+                    window.present();
+                }
+            });
+
+            // Retry button
+            let window_weak = self.obj().downgrade();
+            self.obj().imp().retry_button.connect_clicked(move |_| {
+                if let Some(window) = window_weak.upgrade() {
+                    window.try_load_boot_candidates();
                 }
             });
         }
@@ -118,6 +124,81 @@ impl StartupDiskWindow {
             .build()
     }
 
+    fn show_error(&self, description: &str, show_retry: bool) {
+        self.imp()
+            .error_status_page
+            .set_description(Some(description));
+        self.imp().retry_button.set_visible(show_retry);
+        self.imp().stack.set_visible_child_name("error");
+    }
+
+    fn try_load_boot_candidates(&self) {
+        // Clear any previous candidates
+        self.get_list_store().remove_all();
+
+        /* This is neede to keep the window hidden in between the privilege
+        escalation prompts */
+        self.set_visible(false);
+
+        // We use a callback to populate the window...
+        let window = self.clone();
+        glib::idle_add_local_once(move || {
+            match window.add_boot_candidates() {
+                Ok(()) => {
+                    window.imp().stack.set_visible_child_name("boot_candidates");
+                }
+                Err(e) => {
+                    window.show_error(&e.to_string(), true);
+                }
+            }
+
+            // ...and nest another one to resize and make it visible
+            let w = window.clone();
+            glib::idle_add_local_once(move || {
+                w.set_default_size(-1, -1);
+                w.present();
+            });
+        });
+    }
+
+    fn set_boot_volume_with_retry(window: &Self, position: u32, object: &BootCandidateObject) {
+        let startup_disk_library = startup_disk_library();
+        if let Err(e) = startup_disk_library.set_boot_volume(
+            "/dev/mtd/by-name/nvram",
+            object.imp().boot_candidate.borrow().as_ref().unwrap(),
+            false,
+        ) {
+            let dialog = adw::AlertDialog::builder()
+                .heading("Failed to set the boot volume")
+                .body(e.to_string())
+                .build();
+            dialog.add_response("cancel", "Cancel");
+            dialog.add_response("retry", "Retry");
+            dialog.set_response_appearance("retry", adw::ResponseAppearance::Suggested);
+            let window_weak = window.downgrade();
+            let object_weak = object.downgrade();
+            dialog.choose(window, None::<&adw::gio::Cancellable>, move |response| {
+                if let (Some(window), Some(object)) = (window_weak.upgrade(), object_weak.upgrade())
+                {
+                    if response == "retry" {
+                        Self::set_boot_volume_with_retry(&window, position, &object);
+                    }
+                }
+            });
+        } else {
+            // Only update the selection after successfully setting the boot volume
+            window.imp().changing_selection.set(true);
+            window
+                .imp()
+                .grid_view
+                .model()
+                .unwrap()
+                .select_item(position, true);
+            window.imp().changing_selection.set(false);
+            window.imp().confirmed_selection.set(position);
+        }
+    }
+
     /// Convenience function to borrow and clone the list store
     fn get_list_store(&self) -> ListStore {
         self.imp().boot_candidates.borrow().clone().unwrap()
@@ -129,27 +210,29 @@ impl StartupDiskWindow {
         self.imp().boot_candidates.replace(Some(list_store));
 
         let selection_model = adw::gtk::SingleSelection::new(Some(self.get_list_store()));
+        selection_model.set_autoselect(false);
+
         let window = self.clone();
         selection_model.connect_selection_changed(move |selection, _, _| {
+            if window.imp().changing_selection.get() {
+                return;
+            }
+
+            let position = selection.selected();
             if let Some(object) = selection
                 .selected_item()
                 .and_downcast::<BootCandidateObject>()
             {
-                let startup_disk_library = startup_disk_library();
-                if let Err(e) = startup_disk_library.set_boot_volume(
-                    "/dev/mtd/by-name/nvram",
-                    object.imp().boot_candidate.borrow().as_ref().unwrap(),
-                    false,
-                ) {
-                    let dialog = adw::AlertDialog::builder()
-                        .heading("Could Not Set Boot Volume")
-                        .body(e.to_string())
-                        .build();
-                    dialog.add_response("ok", "OK");
-                    dialog.present(Some(&window));
-                }
+                // Immediately revert the highlight to the confirmed selection
+                let confirmed = window.imp().confirmed_selection.get();
+                window.imp().changing_selection.set(true);
+                selection.select_item(confirmed, true);
+                window.imp().changing_selection.set(false);
+
+                Self::set_boot_volume_with_retry(&window, position, &object);
             }
         });
+
         self.imp().grid_view.set_model(Some(&selection_model));
     }
 
@@ -196,8 +279,7 @@ impl StartupDiskWindow {
         let startup_disk_library = startup_disk_library();
 
         // Get default boot candidate
-        let default_cand = startup_disk_library
-            .get_boot_volume("/dev/mtd/by-name/nvram", false)?;
+        let default_cand = startup_disk_library.get_boot_volume("/dev/mtd/by-name/nvram", false)?;
 
         // Add boot candidates to list store
         for (idx, cand) in startup_disk_library
@@ -212,11 +294,14 @@ impl StartupDiskWindow {
             self.get_list_store().append(&object);
 
             if is_default {
+                self.imp().changing_selection.set(true);
                 self.imp()
                     .grid_view
                     .model()
                     .unwrap()
                     .select_item(idx as u32, true);
+                self.imp().changing_selection.set(false);
+                self.imp().confirmed_selection.set(idx as u32);
             }
         }
         Ok(())

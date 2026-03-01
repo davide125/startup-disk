@@ -31,14 +31,13 @@ mod imp {
             let app = self.obj();
 
             let startup_disk_library = startup_disk_library();
-            let window = if let Some(window) = app.active_window() {
-                window
+            if let Some(window) = app.active_window() {
+                window.present();
             } else {
-                let window = StartupDiskWindow::new(&*app, startup_disk_library.is_supported());
-                window.upcast()
-            };
-
-            window.present();
+                /* We start hidden to avoid confusing the using during the
+                privilege escalation */
+                StartupDiskWindow::new(&*app, startup_disk_library.is_supported());
+            }
         }
     }
 
