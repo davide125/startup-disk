@@ -57,4 +57,8 @@ update-caches:
 	gtk-update-icon-cache --force --ignore-theme-index $(DESTDIR)$(DATADIR)/icons/hicolor
 	update-desktop-database $(DESTDIR)$(DATADIR)/applications
 
+format:
+	cargo fmt
+	for f in res/*.{policy,ui,xml}; do work=$$(mktemp) && XMLLINT_INDENT="    " xmllint --format $$f > $$work && mv $$work $$f; done
+
 .PHONY: appdata-test appdata-validate check check-bin check-data install install-bin install-data uninstall uninstall-bin uninstall-data update-caches
