@@ -106,6 +106,8 @@ use adw::{
     Application, ApplicationWindow,
 };
 
+use std::io::Cursor;
+
 use crate::boot_candidate::object::BootCandidateObject;
 use crate::boot_candidate::BootCandidateWidget;
 use crate::startup_disk::{startup_disk_library, StartupDiskError};
@@ -281,6 +283,9 @@ impl StartupDiskWindow {
         // Get default boot candidate
         let default_cand = startup_disk_library.get_boot_volume("/dev/mtd/by-name/nvram", false)?;
 
+        // Load volume icons (best-effort)
+        let icons = startup_disk_library.get_volume_icons().unwrap_or_default();
+
         // Add boot candidates to list store
         for (idx, cand) in startup_disk_library
             .get_boot_candidates()?
@@ -290,7 +295,14 @@ impl StartupDiskWindow {
             let is_default =
                 cand.part_uuid == default_cand.part_uuid && cand.vg_uuid == default_cand.vg_uuid;
 
+            let texture = icons
+                .get(&cand.part_uuid)
+                .and_then(|data| decode_icns_to_texture(data));
+
             let object = BootCandidateObject::new(cand);
+            if let Some(texture) = texture {
+                *object.imp().icon.borrow_mut() = Some(texture);
+            }
             self.get_list_store().append(&object);
 
             if is_default {
@@ -306,4 +318,36 @@ impl StartupDiskWindow {
         }
         Ok(())
     }
+}
+
+fn decode_icns_to_texture(data: &[u8]) -> Option<adw::gdk::Texture> {
+    let icon_family = icns::IconFamily::read(Cursor::new(data)).ok()?;
+
+    let image = icon_family
+        .get_icon_with_type(icns::IconType::RGBA32_128x128)
+        .or_else(|_| {
+            // Fall back to the largest available icon
+            let available = icon_family.available_icons();
+            let largest = available
+                .iter()
+                .max_by_key(|t| t.pixel_width() * t.pixel_height())
+                .ok_or_else(|| std::io::Error::new(std::io::ErrorKind::NotFound, "no icons"))?;
+            icon_family.get_icon_with_type(*largest)
+        })
+        .ok()?;
+
+    let width = image.width();
+    let height = image.height();
+    let pixel_data = image.data();
+    let stride = width * 4;
+
+    let texture = adw::gdk::MemoryTexture::new(
+        width as i32,
+        height as i32,
+        adw::gdk::MemoryFormat::R8g8b8a8,
+        &adw::glib::Bytes::from(pixel_data),
+        stride as usize,
+    );
+
+    Some(texture.into())
 }

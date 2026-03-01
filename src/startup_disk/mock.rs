@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: MIT
 
+use std::collections::HashMap;
+
 use asahi_bless::{BootCandidate, Volume};
 
 use rand::RngExt;
@@ -74,5 +76,9 @@ impl StartupDiskTrait for MockLibrary {
             next
         );
         Ok(())
+    }
+
+    fn get_volume_icons(&self) -> Result<HashMap<Uuid, Vec<u8>>> {
+        Ok(HashMap::new())
     }
 }

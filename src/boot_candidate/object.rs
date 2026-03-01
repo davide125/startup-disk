@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 mod imp {
+    use adw::gdk;
     use adw::glib;
     use adw::prelude::*;
     use adw::subclass::prelude::*;
@@ -14,6 +15,7 @@ mod imp {
         name: RefCell<String>,
 
         pub boot_candidate: RefCell<Option<BootCandidate>>,
+        pub icon: RefCell<Option<gdk::Texture>>,
     }
 
     #[glib::object_subclass]

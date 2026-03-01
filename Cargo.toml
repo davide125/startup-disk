@@ -13,8 +13,11 @@ keywords = ["gnome", "asahi"]
 
 [dependencies]
 adw = { version = "0.8", package = "libadwaita", features = ["v1_8"] }
+apfs = "0.2.3"
 asahi-bless = "0.4.2"
+gpt = "3"
 gtk = { version = "0.10", package = "gtk4", features = ["gnome_49"] }
+icns = "0.4.0"
 nix = { version = "0.31.1", features = ["user"] }
 rand = "0.10"
 serde = { version = "1", features = ["derive"] }

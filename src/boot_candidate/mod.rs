@@ -4,13 +4,15 @@ pub mod object;
 
 mod imp {
     use adw::glib::{self, subclass::InitializingObject, Binding};
-    use adw::gtk::{self, CompositeTemplate, Label};
+    use adw::gtk::{self, CompositeTemplate, Image, Label};
     use adw::subclass::prelude::*;
     use std::cell::RefCell;
 
     #[derive(Default, CompositeTemplate)]
     #[template(resource = "/org/startup-disk/StartupDisk/boot_candidate.ui")]
     pub struct BootCandidateWidget {
+        #[template_child]
+        pub icon: TemplateChild<Image>,
         #[template_child]
         pub name: TemplateChild<Label>,
 
@@ -67,6 +69,12 @@ impl BootCandidateWidget {
             .sync_create()
             .build();
         bindings.push(name_binding);
+
+        // Set icon if available
+        let icon_texture = object.imp().icon.borrow();
+        if let Some(texture) = icon_texture.as_ref() {
+            self.imp().icon.set_paintable(Some(texture));
+        }
     }
 
     // Removes bindings
@@ -74,6 +82,7 @@ impl BootCandidateWidget {
         for binding in self.imp().bindings.borrow_mut().drain(..) {
             binding.unbind();
         }
+        self.imp().icon.set_icon_name(Some("drive-harddisk"));
     }
 }
 

@@ -1,11 +1,14 @@
 // SPDX-License-Identifier: MIT
 
-use asahi_bless::{BootCandidate, Volume};
+use std::collections::HashMap;
 use std::env;
 use std::path::Path;
-use thiserror::Error;
 
-mod asahi;
+use asahi_bless::{BootCandidate, Volume};
+use thiserror::Error;
+use uuid::Uuid;
+
+pub(crate) mod asahi;
 mod mock;
 
 #[derive(Debug, Error)]
@@ -45,6 +48,7 @@ pub trait StartupDiskTrait {
     fn get_boot_candidates(&self) -> Result<Vec<BootCandidate>>;
     fn get_boot_volume(&self, device: &str, next: bool) -> Result<BootCandidate>;
     fn set_boot_volume(&self, device: &str, cand: &BootCandidate, next: bool) -> Result<()>;
+    fn get_volume_icons(&self) -> Result<HashMap<Uuid, Vec<u8>>>;
 }
 
 enum StartupDiskLibrary {
@@ -76,6 +80,13 @@ impl StartupDiskTrait for StartupDiskLibrary {
         match self {
             StartupDiskLibrary::AsahiBless(lib) => lib.set_boot_volume(device, cand, next),
             StartupDiskLibrary::Mock(lib) => lib.set_boot_volume(device, cand, next),
+        }
+    }
+
+    fn get_volume_icons(&self) -> Result<HashMap<Uuid, Vec<u8>>> {
+        match self {
+            StartupDiskLibrary::AsahiBless(lib) => lib.get_volume_icons(),
+            StartupDiskLibrary::Mock(lib) => lib.get_volume_icons(),
         }
     }
 }

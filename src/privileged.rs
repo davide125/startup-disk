@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 
+use std::collections::HashMap;
 use std::convert::TryInto;
 use std::env;
 use std::io::{Read, Write};
@@ -119,6 +120,15 @@ pub fn set_boot_volume(device: &str, cand: &BootCandidate, next: bool) -> Result
     Ok(())
 }
 
+pub fn get_volume_icons() -> Result<HashMap<Uuid, Vec<u8>>> {
+    let output = run_helper(&["get-volume-icons"], None)?;
+    let serialized: HashMap<String, Vec<u8>> = serde_json::from_str(&output)?;
+    serialized
+        .into_iter()
+        .map(|(k, v)| Ok((Uuid::parse_str(&k)?, v)))
+        .collect::<Result<HashMap<_, _>>>()
+}
+
 pub fn handle_privileged_invocation(args: &[String]) -> glib::ExitCode {
     match dispatch_privileged_command(args) {
         Ok(()) => glib::ExitCode::SUCCESS,
@@ -182,6 +192,14 @@ fn dispatch_privileged_command(args: &[String]) -> Result<()> {
             let candidate: SerializableBootCandidate = serde_json::from_str(&buffer)?;
             let candidate: BootCandidate = candidate.try_into()?;
             asahi_bless::set_boot_volume(device, &candidate, next)?;
+        }
+        Some("get-volume-icons") => {
+            let icons = crate::startup_disk::asahi::read_volume_icons()?;
+            let serializable: HashMap<String, Vec<u8>> = icons
+                .into_iter()
+                .map(|(uuid, data)| (uuid.to_string(), data))
+                .collect();
+            serde_json::to_writer(std::io::stdout(), &serializable)?;
         }
         _ => {
             return Err(StartupDiskError::InvalidHelperInvocation(
