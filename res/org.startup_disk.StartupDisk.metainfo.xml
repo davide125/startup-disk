@@ -30,10 +30,10 @@
     <control>touch</control>
   </supports>
   <releases>
-    <release version="0.1.6" type="development">
+    <release version="0.1.6" date="2026-03-01">
       <description>
         <p>
-          Work in progress
+          Improved privilege escalation and error handling logic
         </p>
       </description>
     </release>
