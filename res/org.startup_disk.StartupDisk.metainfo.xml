@@ -1,83 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-    <id>org.startup_disk.StartupDisk</id>
-    <name>Startup Disk</name>
-    <summary>Choose the startup volume</summary>
-    <metadata_license>CC0-1.0</metadata_license>
-    <project_license>MIT</project_license>
-    <description>
-        <p>
+  <id>org.startup_disk.StartupDisk</id>
+  <name>Startup Disk</name>
+  <summary>Choose the startup volume</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <description>
+    <p>
       Simple interface to choose the startup volume on Apple Silicon systems
     </p>
-    </description>
-    <screenshots>
-        <screenshot type="default">
-            <image>https://gitlab.gnome.org/davide125/startup-disk/-/raw/main/res/screenshot.png</image>
-        </screenshot>
-    </screenshots>
-    <developer_name>Davide Cavalca</developer_name>
-    <url type="homepage">https://startup-disk.org</url>
-    <url type="bugtracker">https://gitlab.gnome.org/davide125/startup-disk/-/issues</url>
-    <project_group>GNOME</project_group>
-    <content_rating type="oars-1.1"/>
-    <requires>
-        <display_length compare="ge">360</display_length>
-        <internet>offline-only</internet>
-    </requires>
-    <supports>
-        <control>pointing</control>
-        <control>keyboard</control>
-        <control>touch</control>
-    </supports>
-    <releases>
-        <release version="0.1.6" type="development">
-            <description>
-                <p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://gitlab.gnome.org/davide125/startup-disk/-/raw/main/res/screenshot.png</image>
+    </screenshot>
+  </screenshots>
+  <developer_name>Davide Cavalca</developer_name>
+  <url type="homepage">https://startup-disk.org</url>
+  <url type="bugtracker">https://gitlab.gnome.org/davide125/startup-disk/-/issues</url>
+  <project_group>GNOME</project_group>
+  <content_rating type="oars-1.1"/>
+  <requires>
+    <display_length compare="ge">360</display_length>
+    <internet>offline-only</internet>
+  </requires>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </supports>
+  <releases>
+    <release version="0.1.6" type="development">
+      <description>
+        <p>
           Work in progress
         </p>
-            </description>
-        </release>
-        <release version="0.1.5" date="2025-02-12">
-            <description>
-                <p>
+      </description>
+    </release>
+    <release version="0.1.5" date="2025-02-12">
+      <description>
+        <p>
           More robust logic for picking the default nvram MTD partition
         </p>
-            </description>
-        </release>
-        <release version="0.1.4" date="2024-05-23">
-            <description>
-                <p>
+      </description>
+    </release>
+    <release version="0.1.4" date="2024-05-23">
+      <description>
+        <p>
           UI improvements
         </p>
-            </description>
-        </release>
-        <release version="0.1.3" date="2023-12-17">
-            <description>
-                <p>
+      </description>
+    </release>
+    <release version="0.1.3" date="2023-12-17">
+      <description>
+        <p>
           Various metadata fixes
         </p>
-            </description>
-        </release>
-        <release version="0.1.2" date="2023-12-15">
-            <description>
-                <p>
+      </description>
+    </release>
+    <release version="0.1.2" date="2023-12-15">
+      <description>
+        <p>
           Fix the displayed app version to be consistent
         </p>
-            </description>
-        </release>
-        <release version="0.1.1" date="2023-12-15">
-            <description>
-                <p>
+      </description>
+    </release>
+    <release version="0.1.1" date="2023-12-15">
+      <description>
+        <p>
           Minor fixes to make packaging easier
         </p>
-            </description>
-        </release>
-        <release version="0.1.0" date="2023-12-06">
-            <description>
-                <p>
+      </description>
+    </release>
+    <release version="0.1.0" date="2023-12-06">
+      <description>
+        <p>
           Initial release
         </p>
-            </description>
-        </release>
-    </releases>
+      </description>
+    </release>
+  </releases>
 </component>

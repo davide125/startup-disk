@@ -59,6 +59,6 @@ update-caches:
 
 format:
 	cargo fmt
-	for f in res/*.{policy,ui,xml}; do work=$$(mktemp) && XMLLINT_INDENT="    " xmllint --format $$f > $$work && mv $$work $$f; done
+	for f in *.doap res/*.{policy,ui,xml}; do work=$$(mktemp) && xmllint --format $$f > $$work && mv $$work $$f; done
 
 .PHONY: appdata-test appdata-validate check check-bin check-data install install-bin install-data uninstall uninstall-bin uninstall-data update-caches
