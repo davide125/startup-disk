@@ -30,6 +30,13 @@
     <control>touch</control>
   </supports>
   <releases>
+    <release version="0.1.8" type="development">
+      <description>
+        <p>
+          Work in progress
+        </p>
+      </description>
+    </release>
     <release version="0.1.7" date="2026-04-28">
       <description>
         <p>
