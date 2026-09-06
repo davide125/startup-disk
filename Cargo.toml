@@ -26,4 +26,4 @@ thiserror = "2"
 uuid = { version = "1.21", features = ["serde"] }
 
 [build-dependencies]
-glib-build-tools = "0.20.0"
+glib-build-tools = "0.22"
