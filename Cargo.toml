@@ -13,17 +13,17 @@ keywords = ["gnome", "asahi"]
 
 [dependencies]
 adw = { version = "0.9", package = "libadwaita", features = ["v1_9"] }
-apfs = "0.2.3"
+apfs = "0.3"
 asahi-bless = "0.4.2"
 gpt = "3"
 gtk = { version = "0.11", package = "gtk4", features = ["gnome_50"] }
-icns = "0.4.0"
+icns = "0.5"
 nix = { version = "0.31", features = ["user"] }
 rand = "0.10"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 thiserror = "2"
-uuid = { version = "1.21", features = ["serde"] }
+uuid = { version = "1.26", features = ["serde"] }
 
 [build-dependencies]
 glib-build-tools = "0.22"
