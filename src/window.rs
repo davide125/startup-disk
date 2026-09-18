@@ -179,14 +179,19 @@ impl StartupDiskWindow {
             dialog.set_response_appearance("retry", adw::ResponseAppearance::Suggested);
             let window_weak = window.downgrade();
             let object_weak = object.downgrade();
-            dialog.choose(Some(window), None::<&adw::gio::Cancellable>, move |response| {
-                if let (Some(window), Some(object)) = (window_weak.upgrade(), object_weak.upgrade())
-                {
-                    if response == "retry" {
-                        Self::set_boot_volume_with_retry(&window, position, &object);
+            dialog.choose(
+                Some(window),
+                None::<&adw::gio::Cancellable>,
+                move |response| {
+                    if let (Some(window), Some(object)) =
+                        (window_weak.upgrade(), object_weak.upgrade())
+                    {
+                        if response == "retry" {
+                            Self::set_boot_volume_with_retry(&window, position, &object);
+                        }
                     }
-                }
-            });
+                },
+            );
         } else {
             // Only update the selection after successfully setting the boot volume
             window.imp().changing_selection.set(true);
