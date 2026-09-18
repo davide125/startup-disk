@@ -72,7 +72,13 @@ impl StartupDiskApplication {
         let about_action = ActionEntry::builder("about")
             .activate(move |app: &Self, _, _| app.show_about())
             .build();
-        self.add_action_entries([about_action]);
+
+        // Quit action
+        let quit_action = ActionEntry::builder("quit")
+            .activate(move |app: &Self, _, _| app.quit())
+            .build();
+
+        self.add_action_entries([about_action, quit_action]);
 
         // Keyboard shortcuts
         self.set_accels_for_action("app.quit", &["<primary>q"]);
